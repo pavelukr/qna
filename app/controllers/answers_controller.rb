@@ -1,8 +1,11 @@
 class AnswersController < ApplicationController
   before_action :find_question, only: [:create, :new]
-  before_action :find_answer, only: [:show]
+  before_action :find_answer, only: [:show, :edit, :update]
 
   def show
+  end
+
+  def edit
   end
 
   def new
@@ -15,6 +18,14 @@ class AnswersController < ApplicationController
       redirect_to @question, note: 'Answer successfully send!'
     else
       redirect_to new_question_answer_path(@question)
+    end
+  end
+
+  def update
+    if @answer.update(answer_params)
+      redirect_to question_answer_path
+    else
+      render :edit
     end
   end
 
