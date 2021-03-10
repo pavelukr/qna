@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
+  sign_in_user
+  let(:question) { create(:question, { user: @user }) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
+    let(:questions) { create_list(:question, 2, { user: @user }) }
 
     before { get :index }
     it 'populates an array of all questions' do
@@ -29,6 +30,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+
     before { get :new }
 
     it 'assigns a new Question to @question' do
@@ -41,6 +43,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
+
     before { get :edit, params: { id: question } }
 
     it 'assigns requested question to @question' do
@@ -53,6 +56,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+
     context 'with valid attributes' do
       it 'saves the new question in the database' do
         expect { post :create, params: { question: { title: 'MyString', body: 'MyText' } } }.to change(Question, :count).by(1)
@@ -77,6 +81,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
+
     context 'valid attributes' do
       it 'assigns requested question to @question' do
         patch :update, params: { id: question, question: { title: 'MyString', body: 'MyText' } }
@@ -101,12 +106,25 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not change question attributes' do
         question.reload
         expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'MyText'
+        expect(question.body).to eq 'MyBodyText'
       end
 
       it 're-renders edit template' do
         expect(response).to render_template :edit
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    before { question }
+
+    it 'deletes question' do
+      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+    end
+
+    it 'redirect to index view' do
+      delete :destroy, params: { id: question }
+      expect(response).to redirect_to questions_path
     end
   end
 end

@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
-  before_action :find_question, only: [:create, :new]
-  before_action :find_answer, only: [:show]
+  before_action :authenticate_user!, except: [:show]
+  before_action :find_question, only: [:create, :new, :destroy]
+  before_action :find_answer, only: [:show, :destroy]
 
   def show
   end
@@ -11,11 +12,17 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.build(answer_params)
+    @answer.user = current_user
     if @answer.save
       redirect_to @question, note: 'Answer successfully send!'
     else
       redirect_to new_question_answer_path(@question)
     end
+  end
+
+  def destroy
+    @answer.destroy
+    redirect_to @question
   end
 
   private

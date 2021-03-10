@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
+  sign_in_user
+  let(:question) { create(:question, { user: @user }) }
+
 
   describe 'GET #show' do
-    let(:answer) { create(:answer, { question: question }) }
-    before { get :show, params: { id: answer, question_id: question.id } }
+    let(:answer) { create(:answer, { question: question, user: @user }) }
+    before { get :show, params: { id: answer, question_id: question.id, user_id: @user.id } }
 
     it 'assigns requested answer to @answer' do
       expect(assigns(:answer)).to eq answer
@@ -17,7 +19,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { get :new, params: { question_id: question.id } }
+    before { get :new, params: { question_id: question.id, user_id: @user.id } }
 
     it 'assigns a new Answer to @answer' do
       expect(assigns(:answer)).to be_a_new(Answer)
@@ -31,25 +33,39 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'saves the new answer in the database' do
-        expect { post :create, params: { answer: { body: 'MyText' }, question_id: question.id } }
+        expect { post :create, params: { answer: { body: 'MyText' }, question_id: question.id, user_id: @user.id } }
           .to change(Answer, :count).by(1)
       end
 
       it 'renders show view' do
-        post :create, params: { answer: { body: 'MyText' }, question_id: question.id }
+        post :create, params: { answer: { body: 'MyText' }, question_id: question.id, user_id: @user.id }
         expect(response).to redirect_to question_path(question.id)
       end
     end
 
     context 'with invalid attributes' do
       it 'does not save the answer' do
-        expect { post :create, params: { answer: { body: nil }, question_id: question.id } }.to_not change(Answer, :count)
+        expect { post :create, params: { answer: { body: nil }, question_id: question.id, user_id: @user.id } }.to_not change(Answer, :count)
       end
 
       it 're-renders new view' do
-        post :create, params: { answer: { body: nil }, question_id: question.id }
+        post :create, params: { answer: { body: nil }, question_id: question.id, user_id: @user.id }
         expect(response).to redirect_to new_question_answer_path(question.id)
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:answer) { create(:answer, { question: question, user: @user }) }
+    before { answer }
+
+    it 'deletes answer' do
+      expect { delete :destroy, params: { id: answer, question_id: question.id, user_id: @user.id } }.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirect to index view' do
+      delete :destroy, params: { id: answer, question_id: question.id, user_id: @user.id }
+      expect(response).to redirect_to question
     end
   end
 end
