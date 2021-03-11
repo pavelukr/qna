@@ -1,22 +1,15 @@
 h2= @question.title
 div= @question.body
--if @question.answers.last != nil && @question.answers.last.body != ""
-  h2 Answers
-  -@question.answers.each do |answer|
-    table
-      tr
-        td
-          =answer.body
-        - if user_signed_in?
-          - if current_user == answer.user
-            td
-              = link_to 'Delete', [@question, answer], method: :delete, data: { confirm: 'Are you sure?' }
 
-= form_for [@question, @answer] do |f|
+h2 Answers
+.answers
+  = render "answers"
+
+= form_for [@question, @answer], remote: true do |f|
   table
     tr
       td
-        = f.label :Enter_your_answer
+        = f.label :body, 'Enter your answer'
     tr
       td
         = f.text_area :body

@@ -4,7 +4,6 @@ RSpec.describe AnswersController, type: :controller do
   sign_in_user
   let(:question) { create(:question, { user: @user }) }
 
-
   describe 'GET #show' do
     let(:answer) { create(:answer, { question: question, user: @user }) }
     before { get :show, params: { id: answer, question_id: question.id, user_id: @user.id } }
@@ -33,24 +32,21 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'saves the new answer in the database' do
-        expect { post :create, params: { answer: { body: 'MyText' }, question_id: question.id, user_id: @user.id } }
-          .to change(Answer, :count).by(1)
-      end
-
-      it 'renders show view' do
-        post :create, params: { answer: { body: 'MyText' }, question_id: question.id, user_id: @user.id }
-        expect(response).to redirect_to question_path(question.id)
+        expect do
+          post :create, params: { answer: { body: 'MyText' },
+                                  question_id: question.id, user_id: @user.id, format: :js }
+        end
+          .to change(question.answers, :count).by(1)
       end
     end
 
     context 'with invalid attributes' do
-      it 'does not save the answer' do
-        expect { post :create, params: { answer: { body: nil }, question_id: question.id, user_id: @user.id } }.to_not change(Answer, :count)
-      end
-
-      it 're-renders new view' do
-        post :create, params: { answer: { body: nil }, question_id: question.id, user_id: @user.id }
-        expect(response).to redirect_to new_question_answer_path(question.id)
+      it 'does not save the question' do
+        expect do
+          post :create, params: { answer: { body: nil },
+                                  question_id: question.id, user_id: @user.id, format: :js }
+        end
+          .to_not change(question.answers, :count)
       end
     end
   end
