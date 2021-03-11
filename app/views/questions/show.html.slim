@@ -1,12 +1,10 @@
 h2= @question.title
 div= @question.body
--if @question.answers.last != nil
+-if @question.answers.last != nil && @question.answers.last.body != ""
   h2 Answers
   -@question.answers.each do |answer|
     table
       tr
-        td
-          = "#{ @question.answers.index(answer) + 1 }."
         td
           =answer.body
         - if user_signed_in?

@@ -8,9 +8,10 @@ I want to see questions and answers list
 
   scenario 'Guest watches questions and answers list' do
     user = create(:user)
-    question = create :question, { user: user }
-    create :answer, { question: question, user: user }
+    question = create(:question, { user: user })
+    answer = create(:answer, { question: question, user: user })
     visit '/questions'
+
     click_on 'Show'
     expect(page).to have_content 'MyString'
     expect(page).to have_content 'MyText'

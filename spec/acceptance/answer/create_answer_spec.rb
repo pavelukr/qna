@@ -6,13 +6,14 @@ As an authenticated user
 ' do
 
   given(:user) { create(:user) }
+  given(:question) { create(:question, { user: user }) }
 
   scenario 'Authenticated user answers to the question' do
     sign_in(user)
-    create_question
+    visit question_path(question)
     create_answer
 
-    expect(page).to have_content 'Test test'
+    expect(page).to have_content 'Body body'
   end
 
   scenario 'Non-authenticated user answers to the question' do
