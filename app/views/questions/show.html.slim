@@ -5,15 +5,16 @@ h2 Answers
 .answers
   = render "answers"
 
-= form_for [@question, @answer], remote: true do |f|
-  table
-    tr
-      td
-        = f.label :body, 'Enter your answer'
-    tr
-      td
-        = f.text_area :body
-    tr
-      td
-        = f.submit 'Send'
+- if user_signed_in?
+  = form_for [@question, @answer], remote: true do |f|
+    table
+      tr
+        td
+          = f.label :body, 'Enter your answer'
+      tr
+        td
+          = f.text_area :body
+      tr
+        td
+          = f.submit 'Send'
 p= link_to 'All questions', questions_path
