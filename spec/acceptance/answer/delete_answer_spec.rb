@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'Delete answer', '
 In order to change answers list
@@ -14,10 +14,11 @@ I want to delete my answer
 answer deletes one', js: true do
     sign_in(user)
     visit question_path(question)
+    click_button 'Delete'
 
-    click_on 'Delete'
-    page.driver.browser.switch_to.alert.accept
+    page.evaluate_script('window.confirm = function() { return true; }')
     expect(page).to_not have_content 'Body body'
+    expect(current_path).to eq question_path(question)
   end
 
   scenario 'Authenticated user but not creator tries to  delete answer' do

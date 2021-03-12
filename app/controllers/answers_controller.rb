@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:show]
-  before_action :find_question, only: [:create, :new, :destroy]
-  before_action :find_answer, only: [:show, :destroy]
+  before_action :find_question, only: [:create, :new, :destroy, :update]
+  before_action :find_answer, only: [:show, :destroy, :update]
 
   def show
   end
@@ -19,6 +19,10 @@ class AnswersController < ApplicationController
   def destroy
     @answer.destroy
     redirect_to @question
+  end
+
+  def update
+    @answer.update(answer_params)
   end
 
   private
