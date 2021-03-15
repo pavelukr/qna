@@ -1,14 +1,15 @@
 h1 Questions
-table
-  - @questions.each do |question|
-    tr
-      td
-        = question.title
-      td
-        = link_to 'Show', question
-
+- @questions.each do |question|
+  div id="body_question_#{question.id}"
+    ul style="list-style-type:none"
+      li= question.title
+      li= link_to 'Show', question
+      li= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
+      li= form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |form|
+        = form.text_field :title
+        = form.text_area :body
+        = form.submit 'Save'
       - if user_signed_in?
         - if current_user == question.user
-          td
-            = button_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }
+          li= button_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }
 p= link_to 'Ask question', new_question_path

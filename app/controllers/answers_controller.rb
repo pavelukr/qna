@@ -18,11 +18,13 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    redirect_to @question
   end
 
   def update
     @answer.update(answer_params)
+    respond_to do |format|
+      format.js
+    end
   end
 
   private

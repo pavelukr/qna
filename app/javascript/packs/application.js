@@ -4,11 +4,16 @@
 // that code so it'll be compiled.
 
 import Rails from "@rails/ujs"
-import Turbolinks from "turbolinks"
+/*import Turbolinks from "turbolinks"*/
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 
 Rails.start()
-Turbolinks.start()
+/*Turbolinks.start()*/
 ActiveStorage.start()
 require("jquery")
+require("/home/pavel/RubymineProjects/qna/app/javascript/packs/answers/answers")
+require("/home/pavel/RubymineProjects/qna/app/javascript/packs/questions/questions")
+require("/home/pavel/RubymineProjects/qna/app/javascript/packs/styles/answers.scss")
+require("/home/pavel/RubymineProjects/qna/app/javascript/packs/styles/questions.scss")
+

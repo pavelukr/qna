@@ -34,6 +34,8 @@ gem 'slim-rails'
 gem 'devise'
 gem 'jquery-rails'
 gem 'webrick'
+gem 'therubyracer'
+gem 'twitter-bootstrap-rails'
 
 
 group :development, :test do
