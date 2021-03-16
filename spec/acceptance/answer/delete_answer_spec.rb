@@ -6,17 +6,17 @@ As a user and creator
 I want to delete my answer
 ' do
 
-  given(:user) { create(:user) }
-  given(:question) { create(:question, { user: user }) }
+  given!(:user) { create(:user) }
+  given!(:question) { create(:question, { user: user }) }
   given!(:answer) { create(:answer, { question: question, user: user }) }
 
   scenario 'Authenticated user and creator of
 answer deletes one', js: true do
     sign_in(user)
     visit question_path(question)
-    click_button 'Delete'
-
-    page.evaluate_script('window.confirm = function() { return true; }')
+    save_and_open_page
+    find('.delete-answer-link').click
+    save_and_open_page
     expect(page).to_not have_content 'Body body'
     expect(current_path).to eq question_path(question)
   end

@@ -1,9 +1,17 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:show]
-  before_action :find_question, only: [:create, :new, :destroy, :update]
+  before_action :find_question, except: [:show]
   before_action :find_answer, only: [:show, :destroy, :update]
 
   def show
+  end
+
+  def select_best
+    @answer = Answer.find(params[:answer_id])
+    @answer.select_best!(@question, @answer)
+    respond_to do |format|
+      format.js
+    end
   end
 
   def new

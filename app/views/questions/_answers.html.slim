@@ -1,13 +1,17 @@
--@question.answers.each do |answer|
+-@question.answers.best_sort.each do |answer|
   div id="body_answer_#{answer.id}"
     -if answer.persisted?
     div
-      = "#{answer.body}   "
+      = answer.body
       - if user_signed_in?
         - if current_user == answer.user
           ul style="list-style-type:none"
-            li.first = link_to 'Delete', [@question, answer], remote:true, method: :delete
+            - if current_user == @question.user && answer.best != true
+              li= link_to 'Select as best', question_answer_select_best_path(@question, answer), method: :patch, remote: true
+            -else
+              li Best
             li = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+            li = button_to 'Delete', [@question, answer], remote:true, method: :delete, class: 'delete-answer-link', data: { confirm: 'Are you sure?' }
           div
             =form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |form|
               = form.text_area :body
