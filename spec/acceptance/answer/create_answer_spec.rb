@@ -16,8 +16,9 @@ As an authenticated user
 
   end
 
-  scenario 'Non-authenticated user answers to the question' do
+  scenario 'Non-authenticated user answers to the question', js: true do
     visit '/questions'
+
     click_on 'Show'
 
     expect(page).to_not have_content 'Send'

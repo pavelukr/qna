@@ -18,7 +18,7 @@ I want to see questions and answers list
     click_on 'Show'
 
     expect(page).to have_content 'MyString'
-    expect(page).to have_button 'Delete'
+    expect(page).to have_content 'Delete'
     expect(page).to have_content 'MyText'
     expect(page).to have_content 'MyBodyText'
     expect(page).to have_content 'All questions'

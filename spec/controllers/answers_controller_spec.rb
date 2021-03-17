@@ -56,13 +56,48 @@ RSpec.describe AnswersController, type: :controller do
     before { answer }
 
     it 'deletes answer' do
-      expect { delete :destroy, params: { id: answer, question_id: question.id, user_id: @user.id } }.to change(Answer, :count).by(-1)
+      expect do
+        delete :destroy, params: { id: answer, question_id: question.id,
+                                   user_id: @user.id }, format: :js
+      end
+        .to change(Answer, :count).by(-1)
+    end
+  end
+
+  describe 'PATCH #select_best' do
+    let!(:answer) { create(:answer, question: question, user: @user) }
+    let!(:best_answer) { create(:answer, question: question, user: @user, best: true) }
+
+    it 'change best answer' do
+      patch :select_best, params: { question_id: question.id, answer_id: answer.id, format: :js }
+
+      answer.reload
+      best_answer.reload
+      expect(answer.best).to eq true
+      expect(best_answer.best).to eq false
+    end
+  end
+
+  describe 'PATCH #update' do
+    let(:answer) { create(:answer, question: question, user: @user) }
+
+    it 'assings the requested answer to @answer' do
+      patch :update, params: { id: answer, answer: { body: 'MyText' },
+                               question_id: question.id, user_id: @user.id, format: :js }
+      expect(assigns(:answer)).to eq answer
     end
 
-    it 'redirect to index view' do
-      delete :destroy, params: { id: answer, question_id: question.id, user_id: @user.id }
-      expect(response).to redirect_to question
+    it 'assigns the question' do
+      patch :update, params: { id: answer, answer: { body: 'MyText' },
+                               question_id: question.id, user_id: @user.id, format: :js }
+      expect(assigns(:question)).to eq question
+    end
+
+    it 'changes answer attributes' do
+      patch :update, params: { id: answer, answer: { body: 'new body' },
+                               question_id: question.id, user_id: @user.id, format: :js }
+      answer.reload
+      expect(answer.body).to eq 'new body'
     end
   end
 end
-

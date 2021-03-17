@@ -30,9 +30,9 @@ html lang="en"
             ul.nav.navbar-nav
               li= link_to 'All questions', questions_path
               -if user_signed_in?
-                li= link_to "Выход", destroy_user_session_path, method: :delete
+                li= link_to "Exit", destroy_user_session_path, method: :delete
               -else
-                li= link_to "Вход", new_user_session_path
+                li= link_to "Sign in", new_user_session_path
 
     .container
       .row

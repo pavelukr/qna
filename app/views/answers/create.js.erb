@@ -4,5 +4,11 @@
   <% end %>
 <% else %>
   $('.answers').append('<%= j render @answer %>');
-  $('#answer_body').val('');
+  $('.answer_body').val('');
+$('.edit-answer-link').click(function (e) {
+    e.preventDefault();
+    $(this).hide();
+    let answer_id = $(this).data('answerId');
+    $('form#edit-answer-' + answer_id).show();
+});
 <% end %>

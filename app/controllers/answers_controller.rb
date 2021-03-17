@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:show]
   before_action :find_question, except: [:show]
-  before_action :find_answer, only: [:show, :destroy, :update]
+  before_action :find_answer, only: [:show, :destroy, :update, :edit]
 
   def show
   end
@@ -9,9 +9,9 @@ class AnswersController < ApplicationController
   def select_best
     @answer = Answer.find(params[:answer_id])
     @answer.select_best!(@question, @answer)
-    respond_to do |format|
-      format.js
-    end
+  end
+
+  def edit
   end
 
   def new
@@ -30,9 +30,6 @@ class AnswersController < ApplicationController
 
   def update
     @answer.update(answer_params)
-    respond_to do |format|
-      format.js
-    end
   end
 
   private
