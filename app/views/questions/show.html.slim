@@ -1,5 +1,10 @@
 h2= @question.title
-div= @question.body
+p= @question.body
+p Attachments:
+ul style="list-style-type:none"
+  -@question.attachments.each do |a|
+    li= link_to a.file.identifier, a.file.url
+    li=link_to 'Delete this file', question_delete_attachment_path(@question, attachment_id: a), method: :patch
 
 h2 Answers
 .answers
@@ -7,16 +12,17 @@ h2 Answers
 
 - if user_signed_in?
   = form_for [@question, @answer], remote: true do |f|
-    table
-      tr
-        td
-          = f.label :body, 'Enter your answer'
-      tr
-        td
-          .answer-errors
-      tr
-        td
-          = f.text_area :body, class: 'answer_body'
-      tr
-        td
-          = f.submit 'Send'
+    p
+      = f.label :body, 'Enter your answer'
+    p
+      .answer-errors
+    p
+      = f.text_area :body, class: 'answer_body'
+    p Attachments:
+    p
+      = f.fields_for :attachments do |attachment|
+        = render 'attachment_fields', f: attachment
+      .links
+        = link_to_add_association 'add file', f, :attachments
+    p
+      = f.submit 'Send'

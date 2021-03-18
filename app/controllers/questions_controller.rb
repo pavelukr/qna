@@ -4,6 +4,15 @@ class QuestionsController < ApplicationController
 
   def new
     @question = Question.new
+    @question.attachments.build
+  end
+
+  def delete_attachment
+    @question = Question.find(params[:question_id])
+    @attachment = Attachment.find(params[:attachment_id])
+    @attachment.destroy
+    @question.save
+    redirect_to @question, note: 'Your file successfully deleted.'
   end
 
   def index
@@ -22,6 +31,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.build
+    @answer.attachments.build
   end
 
   def edit
@@ -43,6 +53,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :_destroy])
   end
 end

@@ -36,6 +36,8 @@ gem 'jquery-rails'
 gem 'webrick'
 gem 'therubyracer'
 gem 'twitter-bootstrap-rails'
+gem 'carrierwave'
+gem "cocoon"
 
 
 group :development, :test do

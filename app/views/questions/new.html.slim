@@ -1,18 +1,18 @@
 h2 Ask new question
 = form_for @question do |f|
-  table
-    tr
-      td
-        = f.label :title
-    tr
-      td
-        = f.text_field :title
-    tr
-      td
-        = f.label :body
-    tr
-      td
-        = f.text_area :body
-    tr
-      td
-        = f.submit 'Create'
+  p
+    = f.label :title
+  p
+    = f.text_field :title
+  p
+    = f.label :body
+  p
+    = f.text_area :body
+  p Attachments:
+  p
+    = f.fields_for :attachments do |attachment|
+      = render 'attachment_fields', f: attachment
+      .links
+        = link_to_add_association 'add file', f, :attachments
+  p
+    = f.submit 'Create'

@@ -12,6 +12,7 @@ Rails.start()
 /*Turbolinks.start()*/
 ActiveStorage.start()
 require("jquery")
+require("@nathanvda/cocoon")
 require("/home/pavel/RubymineProjects/qna/app/javascript/packs/answers/answers")
 require("/home/pavel/RubymineProjects/qna/app/javascript/packs/questions/questions")
 require("/home/pavel/RubymineProjects/qna/app/javascript/packs/styles/answers.scss")

@@ -14,6 +14,13 @@ class AnswersController < ApplicationController
   def edit
   end
 
+  def delete_attachment
+    @answer = Answer.find(params[:answer_id])
+    @attachment = Attachment.find(params[:attachment_id])
+    @attachment.destroy
+    @answer.save
+  end
+
   def new
     @answer = @question.answers.build
   end
@@ -43,6 +50,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :question_id)
+    params.require(:answer).permit(:body, :question_id, attachments_attributes: [:file, :_destroy])
   end
 end
