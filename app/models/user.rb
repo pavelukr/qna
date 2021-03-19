@@ -6,4 +6,8 @@ class User < ApplicationRecord
 
   has_many :answers
   has_many :questions
+
+  def creator_of(object)
+    true if object.user == self
+  end
 end

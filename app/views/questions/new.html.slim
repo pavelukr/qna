@@ -12,7 +12,7 @@ h2 Ask new question
   p
     = f.fields_for :attachments do |attachment|
       = render 'attachment_fields', f: attachment
-      .links
-        = link_to_add_association 'add file', f, :attachments
+    .links
+      = link_to_add_association 'add file', f, :attachments
   p
     = f.submit 'Create'

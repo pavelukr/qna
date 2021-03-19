@@ -28,6 +28,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
+    it 'builds new attachment for answer' do
+      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
+    end
+
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -39,6 +43,10 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
+    end
+
+    it 'builds new attachment for question' do
+      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
     end
 
     it 'renders new view' do
@@ -97,6 +105,30 @@ RSpec.describe QuestionsController, type: :controller do
         question.reload
         expect(question.title).to eq 'newString'
         expect(question.body).to eq 'newText'
+      end
+    end
+  end
+
+  describe 'PATCH #delete_attachment' do
+    let(:attachment) { create(:attachment, { attachable: question }) }
+
+    context 'valid attributes' do
+      it 'assigns requested question to @question' do
+        patch :delete_attachment, params: { question_id: question.id, attachment_id: attachment.id }
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'assigns requested attachment to @attachment' do
+        patch :delete_attachment, params: { question_id: question.id, attachment_id: attachment.id }
+        expect(assigns(:attachment)).to eq attachment
+      end
+
+      it 'deletes attachment' do
+        question2 = create(:question, { user: @user, attachments: [attachment] })
+        question1 = create(:question, { user: @user, attachments: [attachment] })
+        patch :delete_attachment, params: { question_id: question1.id, attachment_id: attachment.id }
+        question1.reload
+        expect(question1.attachments[0]).to_not eq question2.attachments[0]
       end
     end
   end

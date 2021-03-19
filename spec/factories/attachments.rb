@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :attachment do
-    file { "MyString" }
+    file { File.open 'spec/spec_helper.rb' }
   end
 end

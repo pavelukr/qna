@@ -10,9 +10,9 @@ class QuestionsController < ApplicationController
   def delete_attachment
     @question = Question.find(params[:question_id])
     @attachment = Attachment.find(params[:attachment_id])
-    @attachment.destroy
+    @attachment.destroy if current_user.creator_of(@question)
     @question.save
-    redirect_to @question, note: 'Your file successfully deleted.'
+    redirect_to @question
   end
 
   def index
@@ -38,11 +38,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params)
+    @question.update(question_params) if current_user.creator_of(@question)
   end
 
   def destroy
-    @question.destroy
+    @question.destroy if current_user.creator_of(@question)
     redirect_to questions_path
   end
 

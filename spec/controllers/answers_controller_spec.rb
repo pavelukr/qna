@@ -78,6 +78,34 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #delete_attachment' do
+    let(:answer) { create(:answer, question: question, user: @user) }
+    let(:attachment) { create(:attachment, { attachable: answer }) }
+
+    context 'valid attributes' do
+      it 'assigns requested answer to @answer' do
+        patch :delete_attachment, params: { question_id: question.id, answer_id: answer.id,
+                                            attachment_id: attachment.id }
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'assigns requested attachment to @attachment' do
+        patch :delete_attachment, params: { question_id: question.id, answer_id: answer.id,
+                                            attachment_id: attachment.id }
+        expect(assigns(:attachment)).to eq attachment
+      end
+
+      it 'deletes attachment' do
+        answer2 = create(:answer, { question: question, user: @user, attachments: [attachment] })
+        answer1 = create(:answer, { question: question, user: @user, attachments: [attachment] })
+        patch :delete_attachment, params: { question_id: question.id, answer_id: answer1.id,
+                                            attachment_id: attachment.id }
+        answer1.reload
+        expect(answer1.attachments[0]).to_not eq answer2.attachments[0]
+      end
+    end
+  end
+
   describe 'PATCH #update' do
     let(:answer) { create(:answer, question: question, user: @user) }
 
