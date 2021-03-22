@@ -1,15 +1,23 @@
 h1 Questions
 - @questions.each do |question|
-  div id="body_question_#{question.id}"
-    ul style="list-style-type:none"
-      li= question.title
-      li= link_to 'Show', question
-      - if user_signed_in?
-        - if current_user == question.user
-          li= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
-          li= form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |form|
-            = form.text_field :title
-            = form.text_area :body
-            = form.submit 'Save'
-          li= button_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }
+  p
+    div id="body_question_#{question.id}"
+      .container
+        .row
+          .col-lg-3= question.title
+          .col-lg-1= link_to 'Show', question
+          - if user_signed_in?
+            - if current_user != question.user
+              .col-lg-1= link_to 'Vote for', question_like_path(question), class: 'vote-for-question-link',
+                      method: :post, remote: true, data: { type: :json, question_id: question.id }
+              .col-lg-2= link_to 'Vote against', question_dislike_path(question_id: question.id), class: 'vote-against-question-link',
+                      method: :post, remote: true, data: { type: :json, question_id: question.id }
+            - if current_user == question.user
+              .col-lg-1= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
+              .col-lg-1= form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |form|
+                = form.text_field :title
+                = form.text_area :body
+                = form.submit 'Save'
+              .col-lg-1= button_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }
+              p
 p= link_to 'Ask question', new_question_path

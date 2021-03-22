@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :questions do
+
+  concern :voted do
+    post :like, :dislike
+    delete :unvote
+  end
+
+  resources :questions, concerns: :voted do
     patch :delete_attachment
-    resources :answers do
+    resources :answers, concerns: :voted do
       patch :select_best
       patch :delete_attachment
     end

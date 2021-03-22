@@ -1,6 +1,9 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: [:show, :edit, :update, :destroy]
+  before_action :find_question_vote, only: [:like, :dislike]
+
+  include Voted
 
   def new
     @question = Question.new
@@ -50,6 +53,10 @@ class QuestionsController < ApplicationController
 
   def find_question
     @question = Question.find(params[:id])
+  end
+
+  def find_question_vote
+    @instance = Question.find(params[:question_id])
   end
 
   def question_params

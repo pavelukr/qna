@@ -3,6 +3,8 @@ class AnswersController < ApplicationController
   before_action :find_question, except: [:show]
   before_action :find_answer, only: [:show, :destroy, :update, :edit]
 
+  include Voted
+
   def show
   end
 

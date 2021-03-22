@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :answers
   has_many :questions
+  has_many :votes
 
   def creator_of(object)
     true if object.user == self

@@ -8,4 +8,10 @@ $(document).ready(function () {
         let question_id = $(this).data('questionId');
         $('form#edit-question-' + question_id).show();
     });
+
+    $('.vote-for-question-link').click(function (e) {
+        e.preventDefault();
+        let question_id = $(this).data('questionId');
+        $('form#edit-question-' + question_id).show();
+    });
 });
