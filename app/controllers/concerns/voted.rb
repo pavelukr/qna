@@ -2,8 +2,7 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :find_vote, only: :unvote
-    before_action :instance_class_name, only: [:like, :dislike, :unvote]
+    before_action :instance_class_name, only: [:like, :dislike]
   end
 
   def like
@@ -24,16 +23,6 @@ module Voted
     respond_to do |format|
       if @vote.save
         format.json { render json: @instance.count_voices }
-      else
-        format.json { render json: @instance.errors.full_messages, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def unvote
-    respond_to do |format|
-      if @vote.destroy
-        format.json { render json: @instance }
       else
         format.json { render json: @instance.errors.full_messages, status: :unprocessable_entity }
       end

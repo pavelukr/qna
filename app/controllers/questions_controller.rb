@@ -8,6 +8,7 @@ class QuestionsController < ApplicationController
   def new
     @question = Question.new
     @question.attachments.build
+    @question.votes.build
   end
 
   def delete_attachment

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   concern :voted do
     post :like, :dislike
-    delete :unvote
+    resources :votes, only: :destroy
   end
 
 
