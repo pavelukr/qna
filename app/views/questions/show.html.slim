@@ -1,12 +1,15 @@
 h2= @question.title
 p= @question.body
-ul style="list-style-type:none"
+.container
   -@question.attachments.each do |a|
-    -if a.persisted?
-      p Attachments:
-      li= link_to a.file.identifier, a.file.url
-      -if @question.user == current_user
-        li=link_to 'Delete this file', question_delete_attachment_path(@question, attachment_id: a), method: :patch
+    .row
+      -if a.persisted?
+        .col-lg-1 Attachments:
+        .col-lg-2
+          .row= link_to a.file.identifier, a.file.url
+        -if @question.user == current_user
+          .col-lg-1
+            .row=link_to 'Delete this file', question_delete_attachment_path(@question, attachment_id: a), method: :patch
 
 h2 Answers
 .answers

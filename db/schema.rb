@@ -22,7 +22,6 @@ ActiveRecord::Schema.define(version: 2021_03_22_132905) do
     t.bigint "question_id"
     t.bigint "user_id"
     t.boolean "best", default: false
-    t.integer "voices", default: 0
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
@@ -42,7 +41,6 @@ ActiveRecord::Schema.define(version: 2021_03_22_132905) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id"
-    t.integer "voices", default: 0
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 

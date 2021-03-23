@@ -4,20 +4,31 @@ h1 Questions
     div id="body_question_#{question.id}"
       .container
         .row
-          .col-lg-3= question.title
+          .col-lg-2= question.title
           .col-lg-1= link_to 'Show', question
+          .rating-div
+            .col-lg-1= " Rating: "
           - if user_signed_in?
             - if current_user != question.user
-              .col-lg-1= link_to 'Vote for', question_like_path(question), class: 'vote-for-question-link',
-                      method: :post, remote: true, data: { type: :json, question_id: question.id }
-              .col-lg-2= link_to 'Vote against', question_dislike_path(question_id: question.id), class: 'vote-against-question-link',
-                      method: :post, remote: true, data: { type: :json, question_id: question.id }
+              -if question.check_for_user(current_user)
+                .links-for-voting
+                  .col-lg-2
+                    .row= link_to 'Vote for', question_like_path(question), class: 'vote-question-link',
+                        method: :post, remote: true, data: { question_id: question.id }
+                    .row= link_to 'Vote against', question_dislike_path(question_id: question.id), class: 'vote-against-question-link',
+                        method: :post, remote: true, data: { type: :json, question_id: question.id }
+              -else
+                .link-for-deleting
+                  .col-lg-2= link_to 'Delete vote', question_unvote_path(question_id: question.id, vote_id: question.find_vote(current_user) ), class: 'vote-delete-question-link',
+                      method: :delete, remote: true, data: { type: :json, question_id: question.id }
             - if current_user == question.user
-              .col-lg-1= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
-              .col-lg-1= form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |form|
-                = form.text_field :title
-                = form.text_area :body
-                = form.submit 'Save'
-              .col-lg-1= button_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }
+              .col-lg-1
+                .row= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
+                .row= button_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }
+              .col-lg-3
+                = form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |form|
+                  = form.text_field :title
+                  = form.text_area :body
+                  = form.submit 'Save'
               p
 p= link_to 'Ask question', new_question_path

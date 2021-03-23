@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     delete :unvote
   end
 
+
   resources :questions, concerns: :voted do
     patch :delete_attachment
     resources :answers, concerns: :voted do

@@ -3,55 +3,47 @@ module Voted
 
   included do
     before_action :find_vote, only: :unvote
-    before_action :instance_class_name, only: [:like, :dislike]
+    before_action :instance_class_name, only: [:like, :dislike, :unvote]
   end
 
   def like
-    @vote = @instance.votes.build(opinion: +1, user_id: current_user)
+    @vote = @instance.votes.build(opinion: +1, user_id: current_user.id)
 
-=begin
     respond_to do |format|
       if @vote.save
-        format.json { render json: @answer }
+        format.json { render json: @instance.count_voices }
       else
-        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+        format.json { render json: @instance.errors.full_messages, status: :unprocessable_entity }
       end
     end
-=end
   end
 
   def dislike
-    @vote = @class_name.find(params[:id]).votes.build(opinion: -1, user: current_user)
+    @vote = @instance.votes.build(opinion: -1, user_id: current_user.id)
 
-=begin
     respond_to do |format|
       if @vote.save
-        format.json { render json: @answer }
+        format.json { render json: @instance.count_voices }
       else
-        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+        format.json { render json: @instance.errors.full_messages, status: :unprocessable_entity }
       end
     end
-=end
   end
 
   def unvote
-    @vote.destroy if current_user.creator_of(@vote)
-
-=begin
     respond_to do |format|
-      if @vote.save
-        format.json { render json: @answer }
+      if @vote.destroy
+        format.json { render json: @instance }
       else
-        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+        format.json { render json: @instance.errors.full_messages, status: :unprocessable_entity }
       end
     end
-=end
   end
 
   private
 
   def find_vote
-    @vote = Vote.find(params[:id])
+    @vote = Vote.find(params[:vote_id])
   end
 
   def instance_class_name
