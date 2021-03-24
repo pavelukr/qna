@@ -25,19 +25,9 @@ class Answer < ApplicationRecord
     all_voices
   end
 
-  def find_vote(current_user)
-    self.votes.each do |vote|
-      if vote.user_id == current_user.id
-        return vote
-      end
-    end
-  end
-
   def check_for_user(current_user)
     self.votes.each do |vote|
-      if vote.user_id == current_user.id
-        return false
-      end
+      return false if vote.user_id == current_user.id
     end
     true
   end

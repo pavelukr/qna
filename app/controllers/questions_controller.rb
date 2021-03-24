@@ -1,14 +1,13 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: [:show, :edit, :update, :destroy]
-  before_action :find_question_vote, only: [:like, :dislike]
+  before_action :find_question_vote, only: [:like, :dislike, :unvote]
 
   include Voted
 
   def new
     @question = Question.new
     @question.attachments.build
-    @question.votes.build
   end
 
   def delete_attachment

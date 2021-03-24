@@ -9,13 +9,13 @@ I want to edit my answer
   given!(:question) { create(:question, { user: user }) }
   given!(:answer) { create(:answer, { question: question, user: user }) }
 
-  scenario 'Unauthenticated user try to edit question' do
+  scenario "Unauthenticated user try to edit question" do
     visit question_path(question)
 
     expect(page).to_not have_link 'Edit'
   end
 
-  scenario "try to edit other user's answer" do
+  scenario "Authenticated user try to edit other user's answer" do
     user_2 = create(:user)
     sign_in(user_2)
     visit question_path(question)
@@ -23,28 +23,25 @@ I want to edit my answer
     expect(page).to_not have_link 'Edit'
   end
 
-  describe 'Authenticated user' do
-    before do
-      sign_in user
-      visit question_path(question)
-    end
+  scenario 'Authenticated user try to edit his answer', js: true do
+    sign_in user
+    visit question_path(question)
+    click_on 'Edit'
 
-    scenario 'sees link to Edit' do
-      within '.answers' do
-        expect(page).to have_link 'Edit'
+    within('.answers-all') do
+      within('.container-answer') do
+        within('.row-answer') do
+          within('.edit-answer-row') do
+            within('.form-edit-answer') do
+              fill_in 'answer[body]', with: 'edited answer'
+              find('#edit-save-answer-link').click
+            end
+          end
+        end
       end
     end
-
-    scenario 'try to edit his answer', js: true do
-      click_on 'Edit'
-      within '.answers' do
-        fill_in 'answer_body', with: 'edited answer'
-        click_on 'Save'
-        visit question_path(question)
-
-        expect(page).to_not have_content answer.body
-        expect(page).to have_content 'edited answer'
-      end
-    end
+    visit question_path(question)
+    expect(page).to_not have_content answer.body
+    expect(page).to have_content 'edited answer'
   end
 end

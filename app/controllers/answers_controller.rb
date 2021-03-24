@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:show]
   before_action :find_question, except: [:show]
   before_action :find_answer, only: [:show, :destroy, :update, :edit]
-  before_action :find_answer_vote, only: [:like, :dislike]
+  before_action :find_answer_vote, only: [:like, :dislike, :unvote]
 
   include Voted
 

@@ -12,7 +12,7 @@ p= @question.body
             .row=link_to 'Delete this file', question_delete_attachment_path(@question, attachment_id: a), method: :patch
 
 h2 Answers
-.answers
+.answers class="answers-all"
   = render "answers"
 
 - if user_signed_in?

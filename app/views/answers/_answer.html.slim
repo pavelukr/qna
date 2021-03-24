@@ -2,10 +2,13 @@ p
   div class="body_answer_#{@answer.id}" id="body_answer_#{@answer.id}"
     .container
       .row
-        -if @answer.persisted?
+        - if @answer.persisted?
           .col-lg-1== @answer.body
-          .col-lg-1= " Rating: #{@answer.count_voices}"
-          -if @answer.attachments[0] != nil && @answer.attachments[0].persisted?
+          - if @answer.best == true
+            .col-lg-1 Best
+          .rating-div
+            .col-lg-1= "Rating: #{@answer.count_voices}"
+          - if @answer.attachments[0] != nil && @answer.attachments[0].persisted?
             .col-lg-1 Attachments:
             .col-lg-2
               - @answer.attachments.each do |a|
@@ -13,34 +16,33 @@ p
                   .row
                     = link_to a.file.identifier, a.file.url
           - if user_signed_in?
-            - if current_user != @answer.user
-              - if @answer.check_for_user(current_user)
-                .col-lg-2
-                  .row= link_to 'Vote for', question_answer_like_path(@question, answer_id: @answer.id), class: 'vote-for-answer-link',
-                          method: :post, remote: true, data: { type: :json, answer_id: @answer.id }
-                  .row= link_to 'Vote against', question_answer_dislike_path(@question, answer_id: @answer.id), class: 'vote-against-question-link',
-                          method: :post, remote: true, data: { type: :json, answer_id: @answer.id }
-              - else
-                .col-lg-2= link_to 'Delete vote', question_answer_unvote_path(question_id: @question.id, answer_id: @answer.id, vote_id: @answer.find_vote(current_user)),
-                        class: 'vote-against-question-link',
-                        method: :delete, remote: true, data: { type: :json, answer_id: @answer.id }
             - if current_user == @answer.user
-              -if answer.attachments[0] != nil && answer.attachments[0].persisted?
+              - if @answer.attachments[0] != nil && @answer.attachments[0].persisted?
                 .col-lg-2
                   - @answer.attachments.each do |a|
                     - if a.persisted?
                       .row= button_to 'Delete this file', question_answer_delete_attachment_path(@question, @answer, attachment_id: a),
-                            method: :patch, remote: true
-              - if @answer.best == true
-                .col-lg-1 Best
-              - elsif current_user == @question.user
-                .col-lg-2= button_to 'Select answer as best', question_answer_select_best_path(@question, @answer),
-                        method: :patch, remote: true
-              .col-lg-1
+                              method: :patch, remote: true
+              .col-lg-2 class="edit-answer-form"
                 .row= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: @answer.id }
                 .row = link_to 'Delete', question_answer_path(@question, @answer),
                         remote: true, method: :delete, class: 'delete-answer-link'
-              =form_for [@question, @answer], remote: true, html: { id: "edit-answer-#{@answer.id}" } do |form|
-                = form.text_area :body
-                = form.submit 'Save', class: 'edit-save-answer-link'
+                .row= form_for [@question, @answer], remote: true, html: { id: "edit-answer-#{@answer.id}", style: "display:none" } do |form|
+                  = form.text_area :body
+                  = form.submit 'Save', class: 'edit-save-answer-link'
+            - if current_user == @question.user && @answer.best != true
+              .col-lg-2= button_to 'Select answer as best', question_answer_select_best_path(@question, @answer),
+                      method: :patch, remote: true
+            - if current_user != @answer.user
+              - if current_user != @answer.user
+                .col-lg-1= link_to 'Vote', '', class: 'vote-answer-link', remote: true, data: { answer_id: @answer.id, flag: @answer.check_for_user(current_user) }
+                .links-for-voting style="display:none"
+                  .col-lg-2
+                    .row= link_to 'Vote for', '', class: 'vote-for-answer-link',
+                            method: :post, remote: true, data: { question_id: @question.id, answer_id: @answer.id }
+                    .row= link_to 'Vote against', '', class: 'vote-against-answer-link',
+                            method: :post, remote: true, data: { question_id: @question.id, answer_id: @answer.id }
+                .link-for-deleting style="display:none"
+                  .col-lg-2= link_to 'Delete vote', '', class: 'vote-delete-answer-link',
+                          method: :delete, remote: true, data: { question_id: @question.id, answer_id: @answer.id }
                 p
