@@ -28,19 +28,26 @@ I want to edit my answer
     visit question_path(question)
     click_on 'Edit'
 
+=begin
     within('.answers-all') do
       within('.container-answer') do
         within('.row-answer') do
           within('.edit-answer-row') do
-            within('.form-edit-answer') do
-              fill_in 'answer[body]', with: 'edited answer'
-              find('#edit-save-answer-link').click
+            within("#edit-answer-#{answer.id}", visible: false) do
+              binding.pry
+              find('.input-edit-answer', visible: false).set "edited value"
+              find(:xpath, "//input[@id='input-answer-id']").set "my value"
+              find(".edit-save-answer-link-#{answer.id}", visible: false).click
             end
           end
         end
       end
     end
-    visit question_path(question)
+=end
+
+    find('.input-edit-answer', visible: false).set "edited value"
+    save_and_open_page
+    click_on 'Save', visible: false
     expect(page).to_not have_content answer.body
     expect(page).to have_content 'edited answer'
   end
