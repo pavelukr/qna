@@ -12,7 +12,7 @@ h1 Questions
             - if current_user != question.user
               .col-lg-1= link_to 'Vote', '', class: 'vote-question-link', remote: true, data: { question_id: question.id, flag: question.check_for_user(current_user) }
               .links-for-voting class="links-question-voting" style="display:none"
-                .col-lg-2
+                .col-lg-2 class="col-for"
                   .row class="question-for"= link_to 'Vote for', '', class: 'vote-for-question-link',
                         method: :post, remote: true, data: { question_id: question.id }
                   .row= link_to 'Vote against', '', class: 'vote-against-question-link',

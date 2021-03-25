@@ -17,3 +17,6 @@ require("/home/pavel/RubymineProjects/qna/app/javascript/packs/answers/answers")
 require("/home/pavel/RubymineProjects/qna/app/javascript/packs/questions/questions")
 require("/home/pavel/RubymineProjects/qna/app/javascript/packs/styles/answers.scss")
 require("/home/pavel/RubymineProjects/qna/app/javascript/packs/styles/questions.scss")
+
+let App = App || {}
+App.cable = ActionCable.createConsumer();
