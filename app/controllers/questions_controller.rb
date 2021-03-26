@@ -19,6 +19,8 @@ class QuestionsController < ApplicationController
   end
 
   def index
+    @question = Question.new
+    @question.attachments.build
     @questions = Question.all
   end
 
@@ -26,7 +28,7 @@ class QuestionsController < ApplicationController
     @question = Question.new(question_params)
     @question.user = current_user
     if @question.save
-      redirect_to @question, note: 'Your question successfully created.'
+      ActionCable.server.broadcast('questions_channel', { content: @question })
     else
       render :new
     end
