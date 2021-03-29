@@ -3,6 +3,17 @@ Turbolinks.start()*/
 
 $(document).ready(function () {
 
+    $('.ask-new-question').click(function (e) {
+        e.preventDefault();
+        $(this).hide();
+        $('form#new_question').show();
+    });
+
+    $('.submit-form-new').click(function (e) {
+        $('form#new_question').hide();
+        $('.ask-new-question').show();
+    });
+
     $('.edit-question-link').click(function (e) {
         e.preventDefault();
         $(this).hide();

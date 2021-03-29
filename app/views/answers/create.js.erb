@@ -3,7 +3,7 @@
     $('#answer-errors').html('<% j message %>');
   <% end %>
 <% else %>
-  $('.answers').append('<%= j render @answer %>');
+  $('.answers').append('<%= j render(partial: 'answers/answer', locals: { answer: @answer, question: @question }) %>');
   $('.answer_body').val('');
 $('.edit-answer-link').click(function (e) {
     e.preventDefault();

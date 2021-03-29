@@ -3,9 +3,10 @@ h1 Questions
   - @questions.each do |question|
     = render partial: "questions/question", locals: { question: question }
 
-h1 Ask new question
 -if user_signed_in?
-  = form_for @question do |f|
+  p
+    =link_to 'Ask new question', '', class: 'ask-new-question'
+  = form_for @question, remote: true do |f|
     p
       = f.label :title
     p

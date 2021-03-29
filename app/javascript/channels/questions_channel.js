@@ -9,21 +9,6 @@ consumer.subscriptions.create("QuestionsChannel", {
     },
 
     received(data) {
-        this.appendLine(data)
-    },
-
-    appendLine(data) {
-        const html = this.createLine(data)
-        const element = document.querySelector(".questions-index")
-        element.insertAdjacentHTML("beforeend", html)
-    },
-
-    createLine(data) {
-        return `
-      <article class="chat-line">
-        <span class="speaker">${data["content"]["title"]}</span>
-        <span class="body">${data["content"]["body"]}</span>
-      </article>
-    `
+      $('.questions-index').append(data['question']);
     }
 });

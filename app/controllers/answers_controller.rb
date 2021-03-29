@@ -2,9 +2,11 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:show]
   before_action :find_question, except: [:show]
   before_action :find_answer, only: [:show, :destroy, :update, :edit]
-  before_action :find_answer_vote, only: [:like, :dislike, :unvote]
+  before_action :find_answer_vote, only: [:like, :dislike, :unvote, :create_comment, :delete_comment]
+  after_action :perform, only: [:create]
 
   include Voted
+  include Commented
 
   def show
   end
@@ -43,6 +45,20 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def perform
+    ActionCable.server.broadcast 'answers_channel', { answer: render_answer(@answer, @question) }
+  end
+
+  def render_answer(answer, question)
+    warden = request.env["warden"]
+    ApplicationController.renderer.instance_variable_set(:@env, { "HTTP_HOST" => "localhost:3000",
+                                                                  "HTTPS" => "off",
+                                                                  "REQUEST_METHOD" => "GET",
+                                                                  "SCRIPT_NAME" => "",
+                                                                  "warden" => warden })
+    ApplicationController.renderer.render(partial: 'answers/answer', locals: { answer: answer, question: question })
+  end
 
   def find_question
     @question = Question.find(params[:question_id])
