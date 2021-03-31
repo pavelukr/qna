@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:show, :edit, :update, :destroy]
-  before_action :find_question_vote, only: [:like, :dislike, :unvote, :create_comment, :delete_comment]
+  before_action :authenticate_user!, except: %i[index show]
+  before_action :find_question, only: %i[show edit update destroy]
+  before_action :find_question_vote, only: %i[like dislike unvote create_comment delete_comment]
   before_action :build_answer, only: :show
   before_action :find_question_attachment, only: :delete_attachment
   before_action :find_attachment, only: :delete_attachment
@@ -10,8 +10,7 @@ class QuestionsController < ApplicationController
   include Voted
   include Commented
 
-  respond_to :html
-  respond_to :js, only: [:update, :edit]
+  respond_to :js, only: %i[update edit]
 
   def delete_attachment
     @attachment.destroy if current_user.creator_of(@question)
@@ -68,7 +67,7 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :_destroy])
+    params.require(:question).permit(:title, :body, attachments_attributes: %i[file _destroy])
   end
 
   def build_answer
