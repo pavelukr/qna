@@ -1,27 +1,44 @@
 h2= @question.title
 p= @question.body
 .container
+  .row
+    - if @question.attachments[0] != nil && @question.attachments.first.persisted?
+      .col-lg-1 Attachments:
   -@question.attachments.each do |a|
     .row
       -if a.persisted?
-        .col-lg-1 Attachments:
         .col-lg-2
           .row= link_to a.file.identifier, a.file.url
         -if @question.user == current_user
           .col-lg-1
             .row=link_to 'Delete this file', question_delete_attachment_path(@question, attachment_id: a), method: :patch
-    .row class="comments-row"
-      -@question.comments.each do |comment|
-        - if comment.persisted?
-          .col-lg-1 Comments:
-          .col-lg-2
-            .row= comment.view
+  .row class="comments_row_#{@question.id}"
+    .row
+      h4 Comment section for question
+    -@question.comments.each do |comment|
+      - if comment.persisted?
+        .row class="comment-section"
+          .col-lg-2= comment.view
+          -if current_user != nil && current_user.id == comment.user_id
+            .col-lg-2
+              =link_to 'Delete comment', question_delete_comment_path(@question), method: :delete
+  - if user_signed_in?
+    .col-lg-2
+      = form_with url: "/questions/#{@question.id}/create_comment", method: :post do |form|
+        .row
+          = form.label :body, 'Enter your comment for this question'
+        .row
+          = form.text_area :view
+        .row
+          = form.submit "Comment"
 
 h2 Answers
 .answers class="answers-all"
   = render "answers"
 
 - if user_signed_in?
+  p
+  =link_to 'Ask new answer', '', class: 'ask-new-answer'
   = form_for [@question, @answer], remote: true do |f|
     p
       = f.label :body, 'Enter your answer'
@@ -31,9 +48,9 @@ h2 Answers
       = f.text_area :body, class: 'answer_body'
     p Attachments:
     p
-      = f.fields_for :attachments do |attachment|
+      = f.fields_for :attachments, @answer.attachments.build do |attachment|
         = render 'attachment_fields', f: attachment
       .links
         = link_to_add_association 'add file', f, :attachments
     p
-      = f.submit 'Send'
+      = f.submit 'Send', class: 'submit-form-new-answer'

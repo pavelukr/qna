@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(version: 2021_03_29_083104) do
 
   create_table "comments", force: :cascade do |t|
     t.string "view"
-    t.integer "votable_id"
-    t.string "votable_type"
+    t.integer "commentable_id"
+    t.string "commentable_type"
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

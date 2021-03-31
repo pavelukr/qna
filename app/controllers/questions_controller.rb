@@ -2,43 +2,33 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: [:show, :edit, :update, :destroy]
   before_action :find_question_vote, only: [:like, :dislike, :unvote, :create_comment, :delete_comment]
+  before_action :build_answer, only: :show
+  before_action :find_question_attachment, only: :delete_attachment
+  before_action :find_attachment, only: :delete_attachment
   after_action :perform, only: [:create]
 
   include Voted
   include Commented
 
-  def new
-    @question = Question.new
-    @question.attachments.build
-  end
+  respond_to :html
+  respond_to :js, only: [:update, :edit]
 
   def delete_attachment
-    @question = Question.find(params[:question_id])
-    @attachment = Attachment.find(params[:attachment_id])
     @attachment.destroy if current_user.creator_of(@question)
-    @question.save
-    redirect_to @question
+    respond_with @question
   end
 
   def index
     @question = Question.new
-    @question.attachments.build
     @questions = Question.all
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.user = current_user
-    if @question.save
-      ActionCable.server.broadcast('questions_channel', { content: @question })
-    else
-      render :new
-    end
+    respond_with(@question = Question.create(question_params.merge(user_id: current_user.id)))
   end
 
   def show
-    @answer = @question.answers.build
-    @answer.attachments.build
+    respond_with @question
   end
 
   def edit
@@ -50,27 +40,27 @@ class QuestionsController < ApplicationController
 
   def destroy
     @question.destroy if current_user.creator_of(@question)
-    redirect_to questions_path
+    redirect_back(fallback_location: root_path)
   end
 
   private
 
   def perform
-    ActionCable.server.broadcast 'questions_channel', { question: render_question(@question) }
+    ActionCable.server.broadcast 'questions_channel', { question: render_question(current_user, @question) }
   end
 
-  def render_question(question)
-    warden = request.env["warden"]
-    ApplicationController.renderer.instance_variable_set(:@env, {"HTTP_HOST" => "localhost:3000",
-                                                                 "HTTPS" => "off",
-                                                                 "REQUEST_METHOD" => "GET",
-                                                                 "SCRIPT_NAME" => "",
-                                                                 "warden" => warden})
-    ApplicationController.renderer.render(partial: 'questions/question', locals: { question: question })
+  def render_question(user, question)
+    ApplicationController.render_with_signed_in_user(user,
+                                                     partial: 'questions/question',
+                                                     locals: { question: question })
   end
 
   def find_question
     @question = Question.find(params[:id])
+  end
+
+  def find_question_attachment
+    @question = Question.find(params[:question_id])
   end
 
   def find_question_vote
@@ -80,4 +70,13 @@ class QuestionsController < ApplicationController
   def question_params
     params.require(:question).permit(:title, :body, attachments_attributes: [:file, :_destroy])
   end
+
+  def build_answer
+    @answer = @question.answers.build
+  end
+
+  def find_attachment
+    @attachment = Attachment.find(params[:attachment_id])
+  end
+
 end
