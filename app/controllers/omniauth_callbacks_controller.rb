@@ -6,4 +6,8 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       set_flash_message(:notice, :success, kind: 'GitHub') if is_navigational_format?
     end
   end
+
+  def facebook
+    render json: request.env['omniauth.auth']
+  end
 end

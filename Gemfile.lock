@@ -187,6 +187,7 @@ GEM
     nio4r (2.5.7)
     nokogiri (1.11.2-x86_64-linux)
       racc (~> 1.4)
+    oauth (0.5.5)
     oauth2 (1.4.7)
       faraday (>= 0.8, < 2.0)
       jwt (>= 1.0, < 3.0)
@@ -197,12 +198,20 @@ GEM
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
       rack-protection
+    omniauth-facebook (8.0.0)
+      omniauth-oauth2 (~> 1.2)
+    omniauth-oauth (1.2.0)
+      oauth
+      omniauth (>= 1.0, < 3)
     omniauth-oauth2 (1.7.1)
       oauth2 (~> 1.4)
       omniauth (>= 1.9, < 3)
     omniauth-rails_csrf_protection (1.0.0)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
+    omniauth-twitter (1.4.0)
+      omniauth-oauth (~> 1.1)
+      rack
     orm_adapter (0.5.0)
     pg (1.2.3)
     pry (0.14.0)
@@ -383,8 +392,10 @@ DEPENDENCIES
   letter_opener
   listen (~> 3.3)
   omniauth
+  omniauth-facebook
   omniauth-github!
   omniauth-rails_csrf_protection
+  omniauth-twitter
   pg (~> 1.1)
   pry
   puma (~> 5.0)
