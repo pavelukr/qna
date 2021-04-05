@@ -42,8 +42,8 @@ gem 'skim'
 gem 'gon'
 gem 'redis'
 gem 'omniauth'
+gem 'omniauth-gitlab'
 gem 'omniauth-twitter'
-gem 'omniauth-facebook'
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 gem "omniauth-rails_csrf_protection"
 
