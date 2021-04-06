@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :answers
   has_many :questions
   has_many :votes
-  has_many :authorizations
+  has_many :authorizations, dependent: :destroy
 
   def creator_of(object)
     true if object.user == self
@@ -17,6 +17,7 @@ class User < ApplicationRecord
     authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
     return authorization.user if authorization
 
+    binding.pry
     email = auth.info[:email]
     user = User.where(email: email).first
     if user
@@ -29,4 +30,14 @@ class User < ApplicationRecord
     user
   end
 
+  def self.find_for_oauth_twitter(email, provider, uid)
+    @user = User.where(email: email).first
+    if @user
+      @user.authorizations&.create(provider: provider, uid: uid)
+    else
+      password = Devise.friendly_token[0, 20]
+      @user = User.create!(email: email, password: password, password_confirmation: password)
+      @user.authorizations&.create(provider: provider, uid: uid)
+    end
+  end
 end

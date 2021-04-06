@@ -16,10 +16,23 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def twitter
-    @user = User.new
-    if !request.env['omniauth.auth'].info[:email]
-      render 'twitter'
+    auth = request.env['omniauth.auth']
+    authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
+    if authorization
+      @user = authorization.user
+      sign_in_and_redirect @user, event: :authentication
+      set_flash_message(:notice, :success, kind: 'Twitter') if is_navigational_format?
+    else
+      render partial: 'form_twitter', locals: { uid: request.env['omniauth.auth'].uid }
     end
-    render json: request.env['omniauth.auth']
+  end
+
+    def sign_in_twitter
+    email = params[:email]
+    provider = params[:provider]
+    uid = params[:uid]
+    @user = User.find_for_oauth_twitter(email, provider, uid)
+    sign_in_and_redirect @user, event: :authentication
+    set_flash_message(:notice, :success, kind: 'Twitter') if is_navigational_format?
   end
 end
