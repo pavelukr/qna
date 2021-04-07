@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: [:github, :gitlab, :twitter]
+         :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: [:github, :twitter]
 
   has_many :answers
   has_many :questions
@@ -15,7 +15,7 @@ class User < ApplicationRecord
   end
 
   def confirm_email
-    UserMailer.sing_in_mailer(self).deliver_now
+    UserMailer.sign_in_confirm(self).deliver_now
   end
 
   def self.find_for_oauth(auth)

@@ -73,4 +73,6 @@ RSpec.configure do |config|
       with.library :rails
     end
   end
+  config.include(OmniauthMacros)
 end
+OmniAuth.config.test_mode = true

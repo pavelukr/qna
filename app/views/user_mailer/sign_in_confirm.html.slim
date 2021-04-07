@@ -1,0 +1,8 @@
+p
+  = "Hello, #{@user.email}"
+
+p You should confirm you email.
+
+= form_tag(sign_in_without_email_url, method: :post) do |form|
+  p = hidden_field_tag :user_id, @user.id
+  p = submit_tag 'Confirm'

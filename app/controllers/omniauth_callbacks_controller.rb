@@ -1,9 +1,8 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  def github
-    authenticate_for_all(request.env['omniauth.auth'])
-  end
 
-  def gitlab
+  skip_before_action :verify_authenticity_token
+
+  def github
     authenticate_for_all(request.env['omniauth.auth'])
   end
 
@@ -19,7 +18,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def sign_in_without_email
-    binding.pry
+    @user = User.find(params[:user_id])
     sign_in_and_redirect @user, event: :authentication
     set_flash_message(:notice, :success, kind: @user.authorizations[0].provider)
   end
