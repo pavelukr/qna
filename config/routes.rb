@@ -1,15 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' } do
-    post '/sign_in_twitter', to: 'omniauth_callbacks#sign_in_twitter'
-    post 'sign_in_twitter', to: 'omniauth_callbacks#sign_in_twitter'
-    post '/sign_in_twitter.user', to: 'omniauth_callbacks#sign_in_twitter'
-    post '/sign_in_twitter/', to: 'omniauth_callbacks#sign_in_twitter'
-  end
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 
   devise_scope :user do
-    post '/sign_in_twitter', to: 'omniauth_callbacks#sign_in_twitter'
-    post '/sign_in_twitter.user', to: 'omniauth_callbacks#sign_in_twitter'
-    post '/sign_in_twitter/', to: 'omniauth_callbacks#sign_in_twitter'
+    post '/sign_in_without_email', to: 'omniauth_callbacks#sign_in_without_email'
+    post '/create_user_without_email', to: 'omniauth_callbacks#create_user_without_email'
   end
 
   concern :voted do

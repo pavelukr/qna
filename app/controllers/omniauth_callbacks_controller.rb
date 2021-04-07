@@ -1,38 +1,39 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def github
-    @user = User.find_for_oauth(request.env['omniauth.auth'])
-    if @user.persisted?
-      sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: 'GitHub') if is_navigational_format?
-    end
+    authenticate_for_all(request.env['omniauth.auth'])
   end
 
   def gitlab
-    @user = User.find_for_oauth(request.env['omniauth.auth'])
-    if @user.persisted?
-      sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: 'GitLab') if is_navigational_format?
-    end
+    authenticate_for_all(request.env['omniauth.auth'])
   end
 
   def twitter
-    auth = request.env['omniauth.auth']
-    authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
-    if authorization
-      @user = authorization.user
-      sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: 'Twitter') if is_navigational_format?
-    else
-      render partial: 'form_twitter', locals: { uid: request.env['omniauth.auth'].uid }
-    end
+    authenticate_for_all(request.env['omniauth.auth'])
   end
 
-    def sign_in_twitter
+  def create_user_without_email
     email = params[:email]
     provider = params[:provider]
     uid = params[:uid]
-    @user = User.find_for_oauth_twitter(email, provider, uid)
+    @user = User.find_for_oauth_without_email(email, provider, uid)
+  end
+
+  def sign_in_without_email
+    binding.pry
     sign_in_and_redirect @user, event: :authentication
-    set_flash_message(:notice, :success, kind: 'Twitter') if is_navigational_format?
+    set_flash_message(:notice, :success, kind: @user.authorizations[0].provider)
+  end
+
+  private
+
+  def authenticate_for_all(auth)
+    @user = User.find_for_oauth(auth)
+    if !@user.nil?
+      sign_in_and_redirect @user, event: :authentication
+      set_flash_message(:notice, :success, kind: auth.provider) if is_navigational_format?
+    else
+      render partial: 'form_email', locals: { provider: auth.provider,
+                                              uid: auth.uid }
+    end
   end
 end

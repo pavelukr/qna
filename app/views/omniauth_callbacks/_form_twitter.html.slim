@@ -1,6 +1,0 @@
-=form_tag(sign_in_twitter_path(:user, 'twitter'), method: :post) do |form|
-  p = label_tag :email, 'Email'
-  p = text_field_tag(:email)
-  p = hidden_field_tag :provider, 'Twitter'
-  p = hidden_field_tag :uid, uid
-  p = submit_tag 'Submit'
