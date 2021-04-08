@@ -1,45 +1,38 @@
 require_relative '../acceptance_helper'
+require 'uri'
+require 'net/http'
+require 'open-uri'
 
-describe "GET '/auth/twitter/callback'" do
+feature 'Authenticate from soc.network', "
+  In order to speed up signing in
+  As an soc.network user
+  I'd like to authenticate using created account
+" do
 
-  before(:each) do
+  before do
+    Rails.application.env_config["devise.mapping"] = Devise.mappings[:user] # If using Devise
+    Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:twitter]
+    visit new_user_session_path
     mock_auth_hash
-    get "auth/twitter/callback"
-    request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:twitter]
+    clear_emails
   end
 
-  it "should set user_id" do
-    expect(session[:user_id]).to eq(User.last.id)
+  scenario 'User tries to sign in for the first time' do
+    click_on 'Sign in with Twitter'
+    fill_in 'email', with: 'test@test.com'
+    click_on 'Submit'
+
+    open_email('test@test.com')
+    current_email.click_button 'Confirm'
+    #save_and_open_page
   end
 
-  it "should redirect to root" do
-    expect(response).to redirect_to root_path
-  end
-end
+  scenario 'User tries to sign in after registration' do
+    @user = create(:user, confirmed: true)
+    @user.authorizations.create(provider: 'twitter', uid: '123545')
 
-describe "GET '/auth/twitter/callback'" do
+    click_on 'Sign in with Twitter'
 
-  describe 'access top page' do
-
-    it 'should set user_id' do
-      mock_auth_hash
-      get 'auth/twitter/callback'
-      request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:twitter]
-
-      expect(session[:user_id]).to eq(User.last.id)
-    end
-
-    it 'should redirect to root' do
-      expect(response).to redirect_to root_path
-    end
-
-    it 'can handle authentication error' do
-      OmniAuth.config.mock_auth[:twitter] = :invalid_credentials
-      visit '/users/sign_in'
-      page.should have_content('Sign in with Twitter')
-      click_link 'Sign in with Twitter'
-      page.should have_content('Could not authenticate you from Twitter because "Invalid credentials".')
-    end
-
+    expect(page).to have_content 'Successfully authenticated from twitter account.'
   end
 end

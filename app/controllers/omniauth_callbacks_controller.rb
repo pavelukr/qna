@@ -19,15 +19,22 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def sign_in_without_email
     @user = User.find(params[:user_id])
-    sign_in_and_redirect @user, event: :authentication
-    set_flash_message(:notice, :success, kind: @user.authorizations[0].provider)
+    flag = params[:flag]
+    if flag == 'true'
+      @user.confirmed = true
+      @user.save
+      sign_in_and_redirect @user, event: :authentication
+      set_flash_message(:notice, :success, kind: @user.authorizations[0].provider)
+    else
+      @user.destroy
+    end
   end
 
   private
 
   def authenticate_for_all(auth)
     @user = User.find_for_oauth(auth)
-    if !@user.nil?
+    if !@user.nil? && @user.confirmed == true
       sign_in_and_redirect @user, event: :authentication
       set_flash_message(:notice, :success, kind: auth.provider) if is_navigational_format?
     else

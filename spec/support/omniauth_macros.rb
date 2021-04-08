@@ -8,8 +8,7 @@ module OmniauthMacros
                                uid: '123545',
                                info: {
                                  first_name: "Gaius",
-                                 last_name: "Baltar",
-                                 email: "test@example.com"
+                                 last_name: "Baltar"
                                },
                                credentials: {
                                  token: "123456",
