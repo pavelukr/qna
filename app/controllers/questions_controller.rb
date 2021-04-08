@@ -12,13 +12,22 @@ class QuestionsController < ApplicationController
 
   respond_to :js, only: %i[update edit]
 
+  authorize_resource :question
+  authorize_resource :answer, through: %i[question]
+  authorize_resource :comment
+  authorize_resource :vote
+  authorize_resource :attachment
+
+  def new
+    @question = Question.new
+  end
+
   def delete_attachment
     @attachment.destroy if current_user.creator_of(@question)
     respond_with @question
   end
 
   def index
-    @question = Question.new
     @questions = Question.all
   end
 
