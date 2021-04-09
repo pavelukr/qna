@@ -14,7 +14,7 @@ class QuestionsController < ApplicationController
 
   authorize_resource :question
   authorize_resource :answer, through: %i[question]
-  authorize_resource :comment
+  authorize_resource :comment, through: %i[question]
   authorize_resource :vote
   authorize_resource :attachment
 

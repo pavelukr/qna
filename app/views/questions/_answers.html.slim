@@ -31,7 +31,7 @@
                   = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |form|
                     = form.text_area :body, class: "input-edit-answer", id: "input-answer-id"
                     = form.submit 'Save', class: "edit-save-answer-link-#{answer.id}", id: "edit-save-answer-link-#{answer.id}"
-            - if can?(:update, Question) && answer.best != true
+            - if can?(:select_best, Answer) && answer.best != true
               .col-lg-2= button_to 'Select answer as best', question_answer_select_best_path(@question, answer),
                       method: :patch, remote: true
             - if current_user != answer.user
@@ -48,16 +48,17 @@
                 p
         .row class="comments-row-answers_#{answer.id}"
           .row
-            strong Comment section for answer
-          - answer.comments.each do |comment|
-            - if comment.persisted?
-              .row class="comment-section"
-                .col-lg-2= comment.view
-                - if current_user != nil && current_user.id == comment.user_id
-                  .col-lg-2
-                    = link_to 'Delete comment', question_answer_delete_comment_path(question_id: @question.id, answer_id: answer.id), method: :delete
+            -if !answer.comments[0].nil? && answer.comments[0].persisted?
+              strong Comment section for answer
+            - answer.comments.each do |comment|
+              - if comment.persisted?
+                .row class="comment-section"
+                  .col-lg-2= comment.view
+                  - if current_user != nil && current_user.id == comment.user_id
+                    .col-lg-2
+                      = link_to 'Delete comment', question_answer_delete_comment_path(question_id: @question.id, answer_id: answer.id), method: :delete
         .row
-          - if can?(:create, Comment) && answer.best != true
+          - if can?(:create_comment, Answer)
             .col-lg-2
               = form_with url: "/questions/#{@question.id}/answers/#{answer.id}/create_comment", method: :post do |form|
                 .row

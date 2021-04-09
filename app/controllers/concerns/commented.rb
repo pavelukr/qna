@@ -10,10 +10,8 @@ module Commented
   end
 
   def delete_comment
-    if user_signed_in?
-      @comment = Comment.where(user_id: current_user.id, commentable: @instance).first
-      @comment.destroy
-      redirect_back(fallback_location: root_path)
-    end
+    @comment = Comment.find_by user_id: current_user.id, commentable: @instance
+    @comment.destroy
+    redirect_back(fallback_location: root_path)
   end
 end
