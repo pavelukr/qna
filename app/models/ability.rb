@@ -28,13 +28,13 @@ class Ability
     can :create, [Question, Answer]
     can :update, [Question, Answer], user: user
     can :destroy, [Question, Answer], user: user
-    can :like, [Question, Answer] do |votable|
-      votable.user != user
+
+    can :like, Comment do |answer|
+      answer.user != user
     end
 
-    can :dislike, [Question, Answer] do |votable|
-      votable.user != user
-
+    can :dislike, Comment do |answer|
+      answer.user != user
     end
 
     can :unvote, [Question, Answer] do |votable|
@@ -45,20 +45,7 @@ class Ability
 
     can :delete_attachment, [Question, Answer], question: { user: user }
 
-=begin
-    can :delete_comment, [Question, Answer] do |commentable|
-      commentable.user != user
-    end
-=end
-
-    can :delete_comment, Answer do |commentable|
-      commentable.user == user
-    end
-
-    can :delete_comment, Question do |commentable|
-      commentable.user == user
-    end
-    #can :read, Step, steppable_type: 'OtherThing', steppable_id: OtherThing.published.pluck(:id)
+    can :delete_comment, [Answer, Question], comment: { user: user }
 
     can :create_comment, [Question, Answer]
   end

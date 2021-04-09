@@ -12,11 +12,8 @@ class QuestionsController < ApplicationController
 
   respond_to :js, only: %i[update edit]
 
-  authorize_resource :question
-  authorize_resource :answer, through: %i[question]
-  authorize_resource :comment, through: %i[question]
-  authorize_resource :vote
-  authorize_resource :attachment
+  authorize_resource
+  authorize_resource :comment, through: [:question, :answer]
 
   def new
     @question = Question.new

@@ -1,23 +1,23 @@
--@question.answers.best_sort.each do |answer|
+- @question.answers.best_sort.each do |answer|
   p
     div class="body_answer_#{answer.id}" id="body_answer_#{answer.id}"
       .container class="container-answer"
         .row class="row-answer"
-          -if answer.persisted?
+          - if answer.persisted?
             .col-lg-2 = answer.body
             - if answer.best == true
               .col-lg-1 Best
             .rating-div
               .col-lg-1= "Rating: #{answer.count_voices}"
-            -if answer.attachments[0] != nil && answer.attachments[0].persisted?
+            - if answer.attachments[0] != nil && answer.attachments[0].persisted?
               .col-lg-1 Attachments:
               .col-lg-2
                 - answer.attachments.each do |a|
                   - if a.persisted?
                     .row
                       = link_to a.file.identifier, a.file.url
-            -if can?(:update, Answer)
-              -if answer.attachments[0] != nil && answer.attachments[0].persisted?
+            - if can?(:edit, Answer)
+              - if answer.attachments[0] != nil && answer.attachments[0].persisted?
                 .col-lg-2
                   - answer.attachments.each do |a|
                     - if a.persisted?
@@ -34,7 +34,7 @@
             - if can?(:select_best, Answer) && answer.best != true
               .col-lg-2= button_to 'Select answer as best', question_answer_select_best_path(@question, answer),
                       method: :patch, remote: true
-            - if current_user != answer.user
+            - if can?(:like, Comment)
               .col-lg-1= link_to 'Vote', '', class: 'vote-answer-link', remote: true, data: { answer_id: answer.id, flag: answer.check_for_user(current_user) }
               .links-for-voting style="display:none"
                 .col-lg-2
@@ -48,7 +48,7 @@
                 p
         .row class="comments-row-answers_#{answer.id}"
           .row
-            -if !answer.comments[0].nil? && answer.comments[0].persisted?
+            - if !answer.comments[0].nil? && answer.comments[0].persisted?
               strong Comment section for answer
             - answer.comments.each do |comment|
               - if comment.persisted?

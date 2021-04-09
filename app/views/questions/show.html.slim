@@ -36,7 +36,7 @@ h2 Answers
 .answers class="answers-all"
   = render "answers"
 
-- if user_signed_in?
+- if can?(:create, Answer)
   p
   =link_to 'Ask new answer', '', class: 'ask-new-answer'
   = form_for [@question, @answer], remote: true do |f|
