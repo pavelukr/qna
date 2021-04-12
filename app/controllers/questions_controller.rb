@@ -12,14 +12,12 @@ class QuestionsController < ApplicationController
 
   respond_to :js, only: %i[update edit]
 
-  authorize_resource
-  authorize_resource :comment, through: [:question, :answer]
-
   def new
     @question = Question.new
   end
 
   def delete_attachment
+    authorize @question
     @attachment.destroy if current_user.creator_of(@question)
     respond_with @question
   end
@@ -29,7 +27,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    respond_with(@question = Question.create(question_params.merge(user_id: current_user.id)))
+    respond_with(authorize @question = Question.create(question_params.merge(user_id: current_user.id)))
   end
 
   def show
@@ -40,10 +38,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
+    authorize @question
     @question.update(question_params) if current_user.creator_of(@question)
   end
 
   def destroy
+    authorize @question
     @question.destroy if current_user.creator_of(@question)
     redirect_back(fallback_location: root_path)
   end
