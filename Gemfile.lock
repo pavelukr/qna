@@ -122,6 +122,8 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.4.4)
+    doorkeeper (5.5.0)
+      railties (>= 5)
     erubi (1.10.0)
     execjs (2.7.0)
     factory_bot (6.1.0)
@@ -387,6 +389,7 @@ DEPENDENCIES
   cocoon
   database_cleaner
   devise
+  doorkeeper (= 5.5.0)
   factory_bot_rails
   gon
   jbuilder (~> 2.7)

@@ -47,6 +47,7 @@ gem 'omniauth-twitter'
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 gem "omniauth-rails_csrf_protection"
 gem 'pundit'
+gem 'doorkeeper', '5.5.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
