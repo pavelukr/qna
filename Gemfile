@@ -48,6 +48,7 @@ gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 gem "omniauth-rails_csrf_protection"
 gem 'pundit'
 gem 'doorkeeper', '5.5.0'
+gem 'rack-cors'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -79,6 +80,7 @@ group :test do
   gem 'shoulda-matchers', '~> 4.0'
   gem 'launchy'
   gem 'capybara-email'
+  gem 'json_spec'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  use_doorkeeper
+  use_doorkeeper do
+    skip_controllers :authorizations, :applications,
+                     :authorized_applications
+  end
+
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 
   devise_scope :user do
@@ -31,7 +35,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :profiles do
+      resources :profiles, only: :index do
         get :me, on: :collection
       end
     end

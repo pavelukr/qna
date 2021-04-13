@@ -1,13 +1,27 @@
-class Api::V1::ProfilesController < ApplicationController
-  before_action :doorkeeper_authorize!
-  before_action :test_skip
+module Api
+  module V1
+    class ProfilesController < ApplicationController
+      before_action :doorkeeper_authorize!, unless: :user_signed_in?
 
-  respond_to :json
-  def me
-    skip_client_authentication_for_password_grant = true
-  end
+      respond_to :json
 
-  def test_skip
-    skip_client_authentication_for_password_grant = true
+      def index
+        respond_with list_of_users
+      end
+
+      def me
+        respond_with current_resource_owner
+      end
+
+      protected
+
+      def current_resource_owner
+        @current_resource_owner ||= (User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token)
+      end
+
+      def list_of_users
+        @list_of_users ||= (User.where.not(id: doorkeeper_token.resource_owner_id) if doorkeeper_token)
+      end
+    end
   end
 end
