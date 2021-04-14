@@ -13,7 +13,7 @@ Doorkeeper.configure do
   skip_client_authentication_for_password_grant true
 
   admin_authenticator do
-    current_user || warden.authenticate!(scope: :user)
+    current_user.try(:admin?) || redirect_to(new_user_session_path)
   end
 
   # You can use your own model classes if you need to extend (or even override) default
