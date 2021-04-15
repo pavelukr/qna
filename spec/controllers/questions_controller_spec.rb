@@ -28,10 +28,6 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
-    it 'builds new attachment for answer' do
-      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
-    end
-
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -43,10 +39,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
-    end
-
-    it 'builds new attachment for question' do
-      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
     end
 
     it 'renders new view' do
@@ -142,7 +134,86 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'redirect to index view' do
       delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+      expect(response).to redirect_to '/'
+    end
+  end
+
+  context 'voting' do
+
+    let!(:instance) { create(:question, user: User.new) }
+    let!(:instance2) { create(:question, user: @user) }
+
+    describe 'POST #like' do
+
+      before { do_request_like }
+
+      it_behaves_like 'Like vote'
+
+      def do_request_like
+        post :like, params: { question_id: instance.id, format: :json }
+      end
+
+      def do_request_same_user
+        post :like, params: { question_id: instance2.id, format: :json }
+      end
+    end
+
+    describe 'POST #dislike' do
+
+      before { do_request_dislike }
+
+      it_behaves_like 'Dislike vote'
+
+      def do_request_dislike
+        post :dislike, params: { question_id: instance.id, format: :json }
+      end
+
+      def do_request_same_user
+        post :dislike, params: { question_id: instance2.id, format: :json }
+      end
+    end
+
+    describe 'DELETE #unvote' do
+      let!(:vote) { create(:vote, votable: instance, user_id: @user.id) }
+
+      it_behaves_like 'Unvote'
+
+      before do
+        do_request_unvote
+      end
+
+      def do_request_unvote
+        delete :unvote, params: { question_id: instance.id, format: :json }
+      end
+    end
+  end
+
+  context 'commenting' do
+
+    let!(:instance) { create(:question, user: @user) }
+
+    describe 'POST #create_comment' do
+      it_behaves_like 'Leave comment'
+
+      before { do_request_create_comment }
+
+      def do_request_create_comment
+        post :create_comment, params: { question_id: instance.id, view: 'NewView' }
+      end
+    end
+
+    describe 'DELETE #delete_comment' do
+      let!(:comment) { create(:comment, commentable: instance, user_id: @user.id) }
+
+      it_behaves_like 'Delete Comment'
+
+      before do
+        do_request_delete_comment
+      end
+
+      def do_request_delete_comment
+        delete :delete_comment, params: { question_id: instance.id, format: :json }
+      end
     end
   end
 end

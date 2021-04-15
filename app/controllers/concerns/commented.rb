@@ -3,8 +3,6 @@ module Commented
 
   def create_comment
     @comment = authorize @instance.comments.create(view: params[:view], user_id: current_user.id)
-    ActionCable.server.broadcast 'comments_channel',
-                                 { content: [@comment, { instance_id: @instance.id }] }
   end
 
   def delete_comment
@@ -12,5 +10,12 @@ module Commented
     authorize @comment
     @comment.destroy
     redirect_back(fallback_location: root_path)
+  end
+
+  private
+
+  def publish_comment
+    ActionCable.server.broadcast 'comments_channel',
+                                 { content: [@comment, { instance_id: @instance.id }] }
   end
 end
