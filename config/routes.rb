@@ -22,13 +22,15 @@ Rails.application.routes.draw do
   post '/questions/10', to: proc { [200, {}, ['']] }
   delete '/', to: proc { [200, {}, ['']] }
 
-  resources :questions, concerns: [:voted, :commented] do
+  resources :questions, concerns: %i[voted commented] do
     patch :delete_attachment
-    resources :answers, concerns: [:voted, :commented] do
+    resources :answers, concerns: %i[voted commented] do
       patch :select_best
       patch :delete_attachment
     end
   end
+
+  resources :subscriptions, only: %i[create destroy]
 
   namespace :api do
     namespace :v1 do

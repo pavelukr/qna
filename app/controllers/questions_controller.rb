@@ -5,7 +5,9 @@ class QuestionsController < ApplicationController
   before_action :build_answer, only: :show
   before_action :find_question_attachment, only: :delete_attachment
   before_action :find_attachment, only: :delete_attachment
+  after_action :create_subscription, only: [:create]
   after_action :perform, only: [:create]
+
 
   include Voted
   include Commented
@@ -82,6 +84,10 @@ class QuestionsController < ApplicationController
 
   def find_attachment
     @attachment = Attachment.find(params[:attachment_id])
+  end
+
+  def create_subscription
+    @question.subscriptions.create(user_id: current_user.id, question_id: @question.id)
   end
 
 end

@@ -4,6 +4,7 @@ class Question < ApplicationRecord
   has_many :attachments, as: :attachable
   has_many :votes, as: :votable
   has_many :comments, as: :commentable
+  has_many :subscriptions
   belongs_to :user
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
