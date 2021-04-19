@@ -1,0 +1,8 @@
+p
+  = "Hello, #{@user.email}"
+-if @user.id == @question.user_id
+  p You have a new answer for your question, hurry up and check it out:
+-if @user.id != @question.user_id
+  p We have a new answer for the question, on which you are subscribed:
+
+p= truncate(@answer.body, length: 10)

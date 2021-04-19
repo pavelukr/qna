@@ -15,6 +15,13 @@ class User < ApplicationRecord
     true if object.user == self
   end
 
+  def self.send_daily
+    questions = Question.list_of_questions
+    find_each.each do |user|
+      UserMailer.new_questions_list(user, questions).deliver_later
+    end
+  end
+
   def confirm_email
     UserMailer.sign_in_confirm(self).deliver_now
   end

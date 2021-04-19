@@ -8,7 +8,6 @@ class QuestionsController < ApplicationController
   after_action :create_subscription, only: [:create]
   after_action :perform, only: [:create]
 
-
   include Voted
   include Commented
 
@@ -87,7 +86,9 @@ class QuestionsController < ApplicationController
   end
 
   def create_subscription
-    @question.subscriptions.create(user_id: current_user.id, question_id: @question.id)
+    if @question.save
+      @question.subscriptions.create(user_id: current_user.id, question_id: @question.id)
+    end
   end
 
 end

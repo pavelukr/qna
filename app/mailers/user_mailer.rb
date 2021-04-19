@@ -11,9 +11,10 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Daily list of new questions')
   end
 
-  def new_answer(user, answer)
+  def new_answer(user, answer, question)
     @user = user
-    @questions = questions
+    @answer = answer
+    @question = question
     mail(to: @user.email, subject: 'Daily list of new questions')
   end
 end

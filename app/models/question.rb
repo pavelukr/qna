@@ -23,13 +23,11 @@ class Question < ApplicationRecord
     true
   end
 
-  private
-
-  def list_of_questions
+  def self.list_of_questions
     questions = []
     now = DateTime.now.to_i
-    Question.all.each do |question|
-      time_diff = (now - question.created_at) / 86_400
+    find_each.each do |question|
+      time_diff = (now - question.created_at.to_i) / 86_400
       questions.push(question) if time_diff < 1
     end
     questions
