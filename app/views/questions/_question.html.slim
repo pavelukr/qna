@@ -4,6 +4,15 @@ p
       .row class="question-row"
         .col-lg-2= question.title
         .col-lg-1= link_to 'Show', question
+        - if policy(Subscription).create?
+          - if Subscription.exists(current_user, question)
+            .col-lg-1
+              = link_to 'Unsubscribe',
+                      subscription_path(Subscription.exists(current_user, question)), method: :delete
+          - if !Subscription.exists(current_user, question)
+            .col-lg-1
+              = link_to 'Subscribe',
+                      subscriptions_path(question_id: question.id, user_id: current_user.id), method: :post
         .rating-div
           .col-lg-1= " Rating: #{question.count_voices}"
         - if policy(question).like?
@@ -27,13 +36,4 @@ p
               = form.text_field :title
               = form.text_area :body
               = form.submit 'Save'
-        - if policy(Subscription).create?
-          - if Subscription.exists(current_user, question)
-            .col-lg-1
-              = link_to 'Unsubscribe',
-                      subscription_path(Subscription.exists(current_user, question)), method: :delete
-          - if !Subscription.exists(current_user, question)
-            .col-lg-1
-              = link_to 'Subscribe',
-                      subscriptions_path(question_id: question.id, user_id: current_user.id), method: :post
           p

@@ -3,6 +3,25 @@ h1 Questions
   - @questions.each do |question|
     = render partial: "questions/question", locals: { question: question }
 
+.search_objects
+  -if !@results.nil?
+    h3 Search
+    -@results.each do |result|
+      .row style="background:white; margin-top:5px; border-radius:10px"
+        -if result.respond_to?(:title)
+          .col-md-2
+            strong= result.title
+        -if result.respond_to?(:body)
+          .col-md-6
+            =result.body
+        - if result.respond_to?(:view)
+          .col-md-6
+            = result.view
+
+p= link_to 'Search through questions', question_search_path
+p= link_to 'Search through answers', answer_search_path
+p= link_to 'Search through comments', comment_search_path
+
 -if policy(Question).create?
   p
     =link_to 'Ask new question', new_question_path

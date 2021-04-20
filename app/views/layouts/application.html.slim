@@ -34,6 +34,9 @@ html lang="en"
               li= link_to current_user.email, ''
             -else
               li= link_to "Sign in", new_user_session_path
+            li= form_for questions_path, method: :get do
+              = text_field_tag :search, params[:search]
+              = submit_tag "Search"
 
     .container
       .row
@@ -43,5 +46,5 @@ html lang="en"
 
 
 
-      footer
+      .footer
         p &copy; Gotoinc 2021
