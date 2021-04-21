@@ -37,9 +37,9 @@ I want to edit my question
       fill_in 'question_title', with: 'edited question'
       fill_in 'question_body', with: 'edited test'
       click_on 'Save'
-
-      visit '/questions'
-      expect(page).to have_content 'edited question'
+      within "#body_question_#{question.id}" do
+        expect(page).to have_content 'edited question'
+      end
     end
   end
 end

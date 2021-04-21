@@ -7,7 +7,7 @@ feature 'Add files to answer', "
 " do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question, user: user) }
+  given!(:question) { create(:question, user: user) }
 
   scenario 'Non-authenticated User adds file to answer' do
     visit question_path(question)
@@ -18,11 +18,10 @@ feature 'Add files to answer', "
   scenario 'Authenticated User adds file to answer', js: true do
     sign_in(user)
     visit question_path(question)
+    click_on 'Ask new answer'
     fill_in 'answer_body', with: 'My answer'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     click_button 'Send'
-    visit question_path(question)
-
     expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
   end
 end

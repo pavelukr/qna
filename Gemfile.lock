@@ -7,6 +7,14 @@ GIT
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.7.1)
 
+GIT
+  remote: https://github.com/thoughtbot/capybara-webkit.git
+  revision: f429d668568ff7349f5e23a085df7fcf1c431fa7
+  specs:
+    capybara-webkit (1.15.1)
+      capybara (>= 2.3, < 4.0)
+      json
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -93,9 +101,6 @@ GEM
     capybara-email (3.0.2)
       capybara (>= 2.4, < 4.0)
       mail
-    capybara-webkit (1.15.1)
-      capybara (>= 2.3, < 4.0)
-      json
     carrierwave (2.2.1)
       activemodel (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -429,7 +434,7 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   capybara-email
-  capybara-webkit
+  capybara-webkit!
   carrierwave
   cocoon
   database_cleaner

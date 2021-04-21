@@ -65,7 +65,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'pry'
   gem 'capybara', '>= 3.26'
-  gem 'capybara-webkit'
+  gem 'capybara-webkit', git: 'https://github.com/thoughtbot/capybara-webkit.git'
 end
 
 group :development do
