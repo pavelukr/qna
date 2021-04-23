@@ -22,8 +22,7 @@ question deletes one', js: true do
   end
 
   scenario 'Authenticated user but not creator tries to delete question' do
-    user2 = create :user
-    sign_in(user2)
+    sign_in(User.new)
     visit '/questions'
     expect(page).to_not have_content 'Delete'
     expect(page).to have_content 'MyString'
