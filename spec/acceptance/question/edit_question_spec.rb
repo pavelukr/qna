@@ -15,8 +15,7 @@ I want to edit my question
   end
 
   scenario "try to edit other user's question" do
-    user_2 = create(:user)
-    sign_in(user_2)
+    sign_in(User.new)
     visit '/questions'
 
     expect(page).to_not have_link 'Edit'
