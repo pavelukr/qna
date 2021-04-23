@@ -21,8 +21,7 @@ answer deletes one', js: true do
   end
 
   scenario 'Authenticated user but not creator tries to  delete answer', js: true do
-    user2 = create :user
-    sign_in(user2)
+    sign_in(User.new)
     visit question_path(question)
 
     expect(page).to_not have_content 'Delete'
