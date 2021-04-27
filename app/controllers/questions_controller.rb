@@ -7,6 +7,7 @@ class QuestionsController < ApplicationController
   before_action :find_attachment, only: :delete_attachment
   after_action :create_subscription, only: [:create]
   after_action :perform, only: [:create]
+  after_action :publish_comment, only: [:create_comment]
 
   include Voted
   include Commented
@@ -19,7 +20,7 @@ class QuestionsController < ApplicationController
 
   def delete_attachment
     authorize @question
-    @attachment.destroy if current_user.creator_of(@question)
+    @attachment.destroy
     respond_with @question
   end
 
@@ -42,12 +43,12 @@ class QuestionsController < ApplicationController
 
   def update
     authorize @question
-    @question.update(question_params) if current_user.creator_of(@question)
+    @question.update(question_params)
   end
 
   def destroy
     authorize @question
-    @question.destroy if current_user.creator_of(@question)
+    @question.destroy
     redirect_back(fallback_location: root_path)
   end
 
