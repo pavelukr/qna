@@ -1,9 +1,15 @@
 class AnswersController < ApplicationController
+
   before_action :authenticate_user!, except: [:show]
+  
   before_action :find_question, only: [:create, :new, :destroy]
   before_action :find_answer, only: [:show, :destroy]
 
+
   def show
+  end
+
+  def edit
   end
 
   def new
@@ -20,9 +26,18 @@ class AnswersController < ApplicationController
     end
   end
 
+
   def destroy
     @answer.destroy
     redirect_to @question
+  end
+
+  def update
+    if @answer.update(answer_params)
+      redirect_to question_answer_path
+    else
+      render :edit
+    end
   end
 
   private
