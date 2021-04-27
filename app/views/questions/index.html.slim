@@ -3,6 +3,6 @@ h1 Questions
   - @questions.each do |question|
     = render partial: "questions/question", locals: { question: question }
 
--if can?(:create, Question)
-  p
-    =link_to 'Ask new question', new_question_path
+
+p
+  =link_to 'Ask new question', new_question_path

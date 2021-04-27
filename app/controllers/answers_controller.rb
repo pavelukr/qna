@@ -10,19 +10,13 @@ class AnswersController < ApplicationController
   include Voted
   include Commented
 
-  authorize_resource :question
-  authorize_resource :answer, through: %i[question]
-  authorize_resource :comment
-  authorize_resource :vote
-  authorize_resource :attachment
-
-
   def show
   end
 
 
   def select_best
     @answer = Answer.find(params[:answer_id])
+    authorize @answer
     @answer.select_best!(@question, @answer) if current_user.creator_of(@question)
   end
 
@@ -32,6 +26,7 @@ class AnswersController < ApplicationController
   def delete_attachment
     @answer = Answer.find(params[:answer_id])
     @attachment = Attachment.find(params[:attachment_id])
+    authorize @answer
     @attachment.destroy if current_user.creator_of(@answer)
     @answer.save
   end
@@ -41,16 +36,18 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.create(answer_params.merge(user_id: current_user.id))
+    @answer = authorize @question.answers.create(answer_params.merge(user_id: current_user.id))
     @answer.save
   end
 
 
   def destroy
+    authorize @answer
     @answer.destroy if current_user.creator_of(@answer)
   end
 
   def update
+    authorize @answer
     @answer.update(answer_params) if current_user.creator_of(@answer)
   end
 
