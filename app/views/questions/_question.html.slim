@@ -6,8 +6,9 @@ p
         .col-lg-1= link_to 'Show', question
         .rating-div
           .col-lg-1= " Rating: #{question.count_voices}"
-        -if policy(question).like?
-          .col-lg-1= link_to 'Vote', '', class: 'vote-question-link', remote: true, data: { question_id: question.id, flag: question.check_for_user(current_user) }
+        - if policy(question).like?
+          .col-lg-1= link_to 'Vote', '', class: 'vote-question-link',
+                  remote: true, data: { question_id: question.id, flag: question.check_for_user(current_user) }
           .links-for-voting class="links-question-voting" style="display:none"
             .col-lg-2 class="col-for"
               .row class="question-for"= link_to 'Vote for', '', class: 'vote-for-question-link',
@@ -17,7 +18,7 @@ p
           .link-for-deleting style="display:none"
             .col-lg-2= link_to 'Delete vote', '', class: 'vote-delete-question-link',
                     method: :delete, remote: true, data: { question_id: question.id }
-        -if policy(question).update?
+        - if policy(question).update?
           .col-lg-1
             .row= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
             .row= button_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }
@@ -26,4 +27,13 @@ p
               = form.text_field :title
               = form.text_area :body
               = form.submit 'Save'
+        - if policy(Subscription).create?
+          - if Subscription.exists(current_user, question)
+            .col-lg-1
+              = link_to 'Unsubscribe',
+                      subscription_path(Subscription.exists(current_user, question)), method: :delete
+          - if !Subscription.exists(current_user, question)
+            .col-lg-1
+              = link_to 'Subscribe',
+                      subscriptions_path(question_id: question.id, user_id: current_user.id), method: :post
           p

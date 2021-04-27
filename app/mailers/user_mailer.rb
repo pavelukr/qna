@@ -4,4 +4,17 @@ class UserMailer < ApplicationMailer
     @user = user
     mail(to: @user.email, subject: 'Confirmation')
   end
+
+  def new_questions_list(user, *questions)
+    @user = user
+    @questions = questions
+    mail(to: @user.email, subject: 'Daily list of new questions')
+  end
+
+  def new_answer(user, answer, question)
+    @user = user
+    @answer = answer
+    @question = question
+    mail(to: @user.email, subject: 'Daily list of new questions')
+  end
 end

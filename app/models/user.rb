@@ -8,10 +8,18 @@ class User < ApplicationRecord
   has_many :questions
   has_many :votes
   has_many :authorizations, dependent: :destroy
+  has_many :subscriptions
   after_create :confirm_email
 
   def creator_of(object)
     true if object.user == self
+  end
+
+  def self.send_daily
+    questions = Question.list_of_questions
+    find_each.each do |user|
+      UserMailer.new_questions_list(user, questions).deliver_later
+    end
   end
 
   def confirm_email

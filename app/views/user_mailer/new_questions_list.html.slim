@@ -1,0 +1,9 @@
+p
+  = "Hello, #{@user.email}"
+
+p Here tou have the list of new questions, which were created after yesterday:
+-if @questions.first.persisted?
+  - @questions.each do |question|
+    p= question.title
+
+p= link_to 'All questions', questions_path
