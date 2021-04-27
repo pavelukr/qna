@@ -10,15 +10,21 @@ class AnswerPolicy < ApplicationPolicy
   end
 
   def update?
-    user_check && user.admin? || user == record.user
+    if user_check
+      user.admin? || user == record.user
+    end
   end
 
   def destroy?
-    user_check && user.admin? || user == record.user
+    if user_check
+      user.admin? || user == record.user
+    end
   end
 
   def delete_attachment?
-    user_check && user.admin? || user == record.user
+    if user_check
+      user.admin? || user == record.user
+    end
   end
 
   def select_best?
