@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  use_doorkeeper do
+    skip_controllers :authorizations, :applications,
+                     :authorized_applications
+  end
+
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 
   devise_scope :user do
@@ -25,6 +30,14 @@ Rails.application.routes.draw do
     resources :answers, concerns: [:voted, :commented] do
       patch :select_best
       patch :delete_attachment
+    end
+  end
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: :index do
+        get :me, on: :collection
+      end
     end
   end
 
