@@ -23,6 +23,7 @@ module AcceptanceHelper
   end
 
   def create_answer
+    click_on 'Ask new answer'
     fill_in 'answer_body', with: 'Body body'
     click_on 'Send'
   end

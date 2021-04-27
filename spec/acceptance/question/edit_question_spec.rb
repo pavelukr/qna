@@ -15,8 +15,7 @@ I want to edit my question
   end
 
   scenario "try to edit other user's question" do
-    user_2 = create(:user)
-    sign_in(user_2)
+    sign_in(User.new)
     visit '/questions'
 
     expect(page).to_not have_link 'Edit'
@@ -37,9 +36,9 @@ I want to edit my question
       fill_in 'question_title', with: 'edited question'
       fill_in 'question_body', with: 'edited test'
       click_on 'Save'
-
-      visit '/questions'
-      expect(page).to have_content 'edited question'
+      within "#body_question_#{question.id}" do
+        expect(page).to have_content 'edited question'
+      end
     end
   end
 end
