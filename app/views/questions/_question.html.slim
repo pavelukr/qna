@@ -2,11 +2,11 @@ div id="body_question_#{@question.id}"
   ul style="list-style-type:none"
     li style=""= question.title
     li= link_to 'Show', question
-    li= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
-    li= form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |form|
-        = form.text_field :title
-        = form.text_area :body
-        = form.submit 'Save'
     - if user_signed_in?
       - if current_user == question.user
+        li= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
+        li= form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |form|
+          = form.text_field :title
+          = form.text_area :body
+          = form.submit 'Save'
         li= button_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }

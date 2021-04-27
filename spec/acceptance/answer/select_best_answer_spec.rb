@@ -22,7 +22,7 @@ I want to select best answer
     sign_in(user_2)
     visit question_path(question)
 
-    expect(page).to_not have_button 'Select as best'
+    expect(page).to_not have_button 'Select answer as best'
   end
 
   describe 'Authenticated user' do
@@ -33,13 +33,13 @@ I want to select best answer
 
     scenario 'sees link to select best' do
       within '.answers' do
-        expect(page).to have_button 'Select as best'
+        expect(page).to have_button 'Select answer as best'
       end
     end
 
     scenario 'try to select best answer', js: true do
       within ".body_answer_#{answer1.id}" do
-        click_button 'Select as best'
+        click_button 'Select answer as best'
       end
       visit question_path(question)
       within ".body_answer_#{answer1.id}" do

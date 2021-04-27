@@ -4,6 +4,9 @@ class AnswersController < ApplicationController
 
   before_action :find_question, except: [:show]
   before_action :find_answer, only: [:show, :destroy, :update, :edit]
+  before_action :find_answer_vote, only: [:like, :dislike, :unvote]
+
+  include Voted
 
 
   def show
@@ -60,6 +63,10 @@ class AnswersController < ApplicationController
 
   def find_answer
     @answer = Answer.find(params[:id])
+  end
+
+  def find_answer_vote
+    @instance = Answer.find(params[:answer_id])
   end
 
   def answer_params
