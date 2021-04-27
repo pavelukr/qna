@@ -16,7 +16,7 @@ module AcceptanceHelper
 
   def create_question
     visit '/questions'
-    click_on 'Ask question'
+    click_on 'Ask new question'
     fill_in 'Title', with: 'Test question'
     fill_in 'Body', with: 'Test test'
     click_on 'Create'

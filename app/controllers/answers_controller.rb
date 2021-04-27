@@ -36,8 +36,7 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = authorize @question.answers.create(answer_params.merge(user_id: current_user.id))
-    @answer.save
+    respond_with(authorize(@answer = @question.answers.create(answer_params.merge(user_id: current_user.id))))
   end
 
 
