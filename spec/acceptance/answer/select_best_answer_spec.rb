@@ -14,7 +14,7 @@ I want to select best answer
   scenario 'Unauthenticated user tries to select' do
     visit question_path(question)
 
-    expect(page).to_not have_link 'Select as best'
+    expect(page).to_not have_button 'Select as best'
   end
 
   scenario "Authenticated user tries to select best answer of another user's question" do
@@ -22,7 +22,7 @@ I want to select best answer
     sign_in(user_2)
     visit question_path(question)
 
-    expect(page).to_not have_link 'Select as best'
+    expect(page).to_not have_button 'Select as best'
   end
 
   describe 'Authenticated user' do

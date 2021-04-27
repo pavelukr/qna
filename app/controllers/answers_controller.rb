@@ -12,10 +12,17 @@ class AnswersController < ApplicationController
 
   def select_best
     @answer = Answer.find(params[:answer_id])
-    @answer.select_best!(@question, @answer)
+    @answer.select_best!(@question, @answer) if current_user.creator_of(@answer)
   end
 
   def edit
+  end
+
+  def delete_attachment
+    @answer = Answer.find(params[:answer_id])
+    @attachment = Attachment.find(params[:attachment_id])
+    @attachment.destroy if current_user.creator_of(@answer)
+    @answer.save
   end
 
   def new
@@ -30,11 +37,11 @@ class AnswersController < ApplicationController
 
 
   def destroy
-    @answer.destroy
+    @answer.destroy if current_user.creator_of(@answer)
   end
 
   def update
-    @answer.update(answer_params)
+    @answer.update(answer_params) if current_user.creator_of(@answer)
   end
 
   def update
@@ -56,6 +63,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :question_id)
+    params.require(:answer).permit(:body, :question_id, attachments_attributes: [:file, :_destroy])
   end
 end

@@ -2,13 +2,21 @@ div id="body_answer_#{@answer.id}"
   div
     = @answer.body
     ul style="list-style-type:none"
-      - if answer.best == true
-        li Best
-      - elsif current_user == @question.user
-        li= link_to 'Select as best', question_answer_select_best_path(@question, @answer), method: :patch, remote: true
+      - @answer.attachments.each do |a|
+        -if a.persisted?
+          p Attachments:
+          li= link_to a.file.identifier, a.file.url
+          li= link_to 'Delete this file', question_answer_delete_attachment_path(@question, answer, attachment_id: a),
+                  method: :patch, remote: true
+    ul style="list-style-type:none"
       li = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: @answer.id }
       li = link_to 'Delete', question_answer_path(@question, answer),
                                remote: true, method: :delete, class: 'delete-answer-link'
+      - if answer.best == true
+        li Best
+      - elsif current_user == @question.user
+        li= link_to 'Select as best', question_answer_select_best_path(@question, @answer),
+                method: :patch, remote: true
     div
       = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |form|
         = form.text_area :body

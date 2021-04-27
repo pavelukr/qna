@@ -4,6 +4,15 @@ class QuestionsController < ApplicationController
 
   def new
     @question = Question.new
+    @question.attachments.build
+  end
+
+  def delete_attachment
+    @question = Question.find(params[:question_id])
+    @attachment = Attachment.find(params[:attachment_id])
+    @attachment.destroy if current_user.creator_of(@question)
+    @question.save
+    redirect_to @question
   end
 
   def index
@@ -22,17 +31,18 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.build
+    @answer.attachments.build
   end
 
   def edit
   end
 
   def update
-    @question.update(question_params)
+    @question.update(question_params) if current_user.creator_of(@question)
   end
 
   def destroy
-    @question.destroy
+    @question.destroy if current_user.creator_of(@question)
     redirect_to questions_path
   end
 
@@ -43,6 +53,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :_destroy])
   end
 end
