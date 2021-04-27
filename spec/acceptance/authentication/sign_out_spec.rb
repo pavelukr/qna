@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'User signs out', '
   In order to have ability finish session
@@ -10,6 +10,7 @@ I want have an ability to sign out
 
   scenario 'Registered user trying to sign out' do
     sign_in(user)
+
     click_on 'Exit'
 
     expect(page).to have_content 'Signed out successfully.'

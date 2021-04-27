@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'Watch questions and answers list', '
 In order to see questions and answers list

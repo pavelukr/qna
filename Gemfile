@@ -33,6 +33,9 @@ gem 'rails-controller-testing'
 gem 'slim-rails'
 gem 'devise'
 gem 'jquery-rails'
+gem 'webrick'
+gem 'therubyracer'
+gem 'twitter-bootstrap-rails'
 
 
 group :development, :test do
@@ -42,6 +45,8 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'database_cleaner'
   gem 'pry'
+  gem 'capybara', '>= 3.26'
+  gem 'capybara-webkit'
 end
 
 group :development do
@@ -57,8 +62,6 @@ end
 
 group :test do
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 3.26'
-  gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
   gem 'shoulda-matchers', '~> 4.0'

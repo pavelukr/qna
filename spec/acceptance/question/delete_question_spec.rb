@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'Delete question', '
 In order to change questions list
@@ -13,8 +13,10 @@ I want to delete my question
 question deletes one', js: true do
     sign_in(user)
     visit '/questions'
-    click_on 'Delete'
-    page.driver.browser.switch_to.alert.accept
+    click_button 'Delete'
+
+    page.evaluate_script('window.confirm = function() { return true; }')
+    expect(current_path).to eq '/questions'
     expect(page).to_not have_content 'MyString'
     expect(current_path).to eq '/questions'
   end

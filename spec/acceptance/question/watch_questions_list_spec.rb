@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'Watch questions list', '
 In order to see questions list
@@ -13,7 +13,7 @@ I want to see questions list
     sign_in(user)
     visit '/questions'
     expect(page).to have_content 'MyString'
-    expect(page).to have_content 'Delete'
+    expect(page).to have_button 'Delete'
 
     click_on 'Show'
 

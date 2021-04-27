@@ -1,12 +1,18 @@
 class AnswersController < ApplicationController
 
   before_action :authenticate_user!, except: [:show]
-  
-  before_action :find_question, only: [:create, :new, :destroy]
-  before_action :find_answer, only: [:show, :destroy]
+
+  before_action :find_question, except: [:show]
+  before_action :find_answer, only: [:show, :destroy, :update, :edit]
 
 
   def show
+  end
+
+
+  def select_best
+    @answer = Answer.find(params[:answer_id])
+    @answer.select_best!(@question, @answer)
   end
 
   def edit
@@ -25,7 +31,10 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    redirect_to @question
+  end
+
+  def update
+    @answer.update(answer_params)
   end
 
   def update

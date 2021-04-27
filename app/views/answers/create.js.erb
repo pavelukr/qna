@@ -1,2 +1,14 @@
-$('.answers').append('<%= j render 'answers/answer' %>');
-$('#answer_body').val('');
+<% if @answer.errors.present? %>
+  <% @answer.errors.full_messages.each do |message| %>
+    $('#answer-errors').html('<% j message %>');
+  <% end %>
+<% else %>
+  $('.answers').append('<%= j render @answer %>');
+  $('.answer_body').val('');
+$('.edit-answer-link').click(function (e) {
+    e.preventDefault();
+    $(this).hide();
+    let answer_id = $(this).data('answerId');
+    $('form#edit-answer-' + answer_id).show();
+});
+<% end %>
