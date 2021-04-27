@@ -10,6 +10,12 @@ p= @question.body
         -if @question.user == current_user
           .col-lg-1
             .row=link_to 'Delete this file', question_delete_attachment_path(@question, attachment_id: a), method: :patch
+    .row class="comments-row"
+      -@question.comments.each do |comment|
+        - if comment.persisted?
+          .col-lg-1 Comments:
+          .col-lg-2
+            .row= comment.view
 
 h2 Answers
 .answers class="answers-all"

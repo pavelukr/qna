@@ -1,33 +1,25 @@
 h1 Questions
-- @questions.each do |question|
+.questions class="questions-index"
+  - @questions.each do |question|
+    = render partial: "questions/question", locals: { question: question }
+
+-if user_signed_in?
   p
-    div id="body_question_#{question.id}"
-      .container class="question-container"
-        .row class="question-row"
-          .col-lg-2= question.title
-          .col-lg-1= link_to 'Show', question
-          .rating-div
-            .col-lg-1= " Rating: #{question.count_voices}"
-          - if user_signed_in?
-            - if current_user != question.user
-              .col-lg-1= link_to 'Vote', '', class: 'vote-question-link', remote: true, data: { question_id: question.id, flag: question.check_for_user(current_user) }
-              .links-for-voting class="links-question-voting" style="display:none"
-                .col-lg-2
-                  .row class="question-for"= link_to 'Vote for', '', class: 'vote-for-question-link',
-                        method: :post, remote: true, data: { question_id: question.id }
-                  .row= link_to 'Vote against', '', class: 'vote-against-question-link',
-                        method: :post, remote: true, data: { question_id: question.id }
-              .link-for-deleting style="display:none"
-                .col-lg-2= link_to 'Delete vote', '', class: 'vote-delete-question-link',
-                      method: :delete, remote: true, data: { question_id: question.id }
-            - if current_user == question.user
-              .col-lg-1
-                .row= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
-                .row= button_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }
-              .col-lg-3
-                = form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |form|
-                  = form.text_field :title
-                  = form.text_area :body
-                  = form.submit 'Save'
-              p
-p= link_to 'Ask question', new_question_path
+    =link_to 'Ask new question', '', class: 'ask-new-question'
+  = form_for @question, remote: true do |f|
+    p
+      = f.label :title
+    p
+      = f.text_field :title
+    p
+      = f.label :body
+    p
+      = f.text_area :body
+    p Attachments:
+    p
+      = f.fields_for :attachments do |attachment|
+        = render 'attachment_fields', f: attachment
+      .links
+        = link_to_add_association 'add file', f, :attachments
+    p
+      = f.submit 'Ask', class: "submit-form-new"

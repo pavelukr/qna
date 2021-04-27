@@ -29,9 +29,9 @@
                   .row = link_to 'Delete', question_answer_path(@question, answer),
                           remote: true, method: :delete, class: 'delete-answer-link'
                   .row class="edit-answer-row"
-                    = form_for [@question, answer], remote: true, html: { class: "form-edit-answer", id: "edit-answer-#{answer.id}", style: "display:none" } do |form|
-                      = form.text_area :body
-                      = form.submit 'Save', class: 'edit-save-answer-link', id:'edit-save-answer-link'
+                    = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |form|
+                      = form.text_area :body, class: "input-edit-answer", id: "input-answer-id"
+                      = form.submit 'Save', class: "edit-save-answer-link-#{answer.id}", id: "edit-save-answer-link-#{answer.id}"
               - if current_user == @question.user && answer.best != true
                 .col-lg-2= button_to 'Select answer as best', question_answer_select_best_path(@question, answer),
                         method: :patch, remote: true

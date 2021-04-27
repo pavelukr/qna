@@ -28,12 +28,13 @@ I want to search through list and vote
     find('.vote-question-link').click
     expect(page).to have_link 'Vote for', visible: false
     expect(page).to have_link 'Vote against', visible: false
-    binding.pry
     within('.question-container') do
       within('.question-row') do
-        within('.links-question-voting') do
-          within('.question-for') do
-            find('.vote-for-question-link').click visible: false
+        within('.links-question-voting', visible: false) do
+          within('.col-for', visible: false) do
+            within('.question-for', visible: false) do
+              find('.vote-for-question-link', visible: false).click
+            end
           end
         end
       end
