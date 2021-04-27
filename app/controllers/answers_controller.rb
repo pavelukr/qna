@@ -17,13 +17,9 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.build(answer_params)
+    @answer = @question.answers.create(answer_params)
     @answer.user = current_user
-    if @answer.save
-      redirect_to @question, note: 'Answer successfully send!'
-    else
-      redirect_to new_question_answer_path(@question)
-    end
+    @answer.save
   end
 
 
