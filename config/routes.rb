@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
+
+  devise_scope :user do
+    post '/sign_in_without_email', to: 'omniauth_callbacks#sign_in_without_email'
+    post '/create_user_without_email', to: 'omniauth_callbacks#create_user_without_email'
+  end
 
   concern :voted do
     post :like, :dislike

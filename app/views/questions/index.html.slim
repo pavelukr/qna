@@ -3,23 +3,6 @@ h1 Questions
   - @questions.each do |question|
     = render partial: "questions/question", locals: { question: question }
 
--if user_signed_in?
+-if can?(:create, Question)
   p
-    =link_to 'Ask new question', '', class: 'ask-new-question'
-  = form_for @question, remote: true do |f|
-    p
-      = f.label :title
-    p
-      = f.text_field :title
-    p
-      = f.label :body
-    p
-      = f.text_area :body
-    p Attachments:
-    p
-      = f.fields_for :attachments, @question.attachments.build do |attachment|
-        = render 'attachment_fields', f: attachment
-      .links
-        = link_to_add_association 'add file', f, :attachments
-    p
-      = f.submit 'Ask', class: "submit-form-new"
+    =link_to 'Ask new question', new_question_path

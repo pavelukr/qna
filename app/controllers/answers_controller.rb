@@ -10,6 +10,12 @@ class AnswersController < ApplicationController
   include Voted
   include Commented
 
+  authorize_resource :question
+  authorize_resource :answer, through: %i[question]
+  authorize_resource :comment
+  authorize_resource :vote
+  authorize_resource :attachment
+
 
   def show
   end
@@ -17,7 +23,7 @@ class AnswersController < ApplicationController
 
   def select_best
     @answer = Answer.find(params[:answer_id])
-    @answer.select_best!(@question, @answer) if current_user.creator_of(@answer)
+    @answer.select_best!(@question, @answer) if current_user.creator_of(@question)
   end
 
   def edit

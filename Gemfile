@@ -41,6 +41,12 @@ gem 'cocoon'
 gem 'skim'
 gem 'gon'
 gem 'redis'
+gem 'omniauth'
+gem 'omniauth-gitlab'
+gem 'omniauth-twitter'
+gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
+gem "omniauth-rails_csrf_protection"
+gem 'cancancan'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -54,6 +60,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "letter_opener"
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 4.1.0'
   # Display performance information such as SQL time and flame graphs for each request in your browser.
@@ -70,6 +77,7 @@ group :test do
   gem 'webdrivers'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'launchy'
+  gem 'capybara-email'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
