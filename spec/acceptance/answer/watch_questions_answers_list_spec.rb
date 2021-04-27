@@ -41,6 +41,6 @@ I want to see questions and answers list
     visit '/questions'
 
     expect(page).to_not have_content 'MyString'
-    expect(page).to have_content 'Ask question'
+    expect(page).to_not have_content 'Ask new question'
   end
 end

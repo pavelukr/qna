@@ -34,7 +34,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'saves the new answer in the database' do
         expect do
           post :create, params: { answer: { body: 'MyText' },
-                                  question_id: question.id, user_id: @user.id, format: :js }
+                                  question_id: question.id, user_id: @user.id }
         end
           .to change(question.answers, :count).by(1)
       end
@@ -44,7 +44,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not save the question' do
         expect do
           post :create, params: { answer: { body: nil },
-                                  question_id: question.id, user_id: @user.id, format: :js }
+                                  question_id: question.id, user_id: @user.id }
         end
           .to_not change(question.answers, :count)
       end
@@ -127,6 +127,85 @@ RSpec.describe AnswersController, type: :controller do
                                question_id: question.id, user_id: @user.id, format: :js }
       answer.reload
       expect(answer.body).to eq 'new body'
+    end
+  end
+
+  context 'commenting' do
+
+    let!(:instance) { create(:answer, question: question, user: User.new) }
+    let!(:instance2) { create(:answer, question: question, user: @user) }
+
+    describe 'POST #like' do
+
+      before { do_request_like }
+
+      it_behaves_like 'Like vote'
+
+      def do_request_like
+        post :like, params: { answer_id: instance.id, question_id: question.id, format: :json }
+      end
+
+      def do_request_same_user
+        post :like, params: { answer_id: instance2.id, question_id: question.id, format: :json }
+      end
+    end
+
+    describe 'POST #dislike' do
+
+      before { do_request_dislike }
+
+      it_behaves_like 'Dislike vote'
+
+      def do_request_dislike
+        post :dislike, params: { answer_id: instance.id, question_id: question.id, format: :json }
+      end
+
+      def do_request_same_user
+        post :dislike, params: { answer_id: instance2.id, question_id: question.id, format: :json }
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      let!(:vote) { create(:vote, votable: instance, user_id: @user.id) }
+
+      it_behaves_like 'Unvote'
+
+      before do
+        do_request_unvote
+      end
+
+      def do_request_unvote
+        delete :unvote, params: { answer_id: instance.id, question_id: question.id, format: :json }
+      end
+    end
+  end
+
+  context 'commenting' do
+
+    let!(:instance) { create(:answer, question: question, user: @user) }
+
+    describe 'POST #create_comment' do
+      it_behaves_like 'Leave comment'
+
+      before { do_request_create_comment }
+
+      def do_request_create_comment
+        post :create_comment, params: { answer_id: instance.id, question_id: question.id, view: 'NewView' }
+      end
+    end
+
+    describe 'DELETE #delete_comment' do
+      let!(:comment) { create(:comment, commentable: instance, user_id: @user.id) }
+
+      it_behaves_like 'Delete Comment'
+
+      before do
+        do_request_delete_comment
+      end
+
+      def do_request_delete_comment
+        delete :delete_comment, params: { answer_id: instance.id, question_id: question.id, format: :json }
+      end
     end
   end
 end

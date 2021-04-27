@@ -18,6 +18,8 @@ feature 'Add files to question', "
     visit new_question_path
     fill_in 'Title', with: 'Test question'
     fill_in 'Body', with: 'text text text'
+    click_on 'add file'
+
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     click_on 'Create'
 

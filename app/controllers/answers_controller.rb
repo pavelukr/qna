@@ -6,6 +6,7 @@ class AnswersController < ApplicationController
   before_action :find_answer, only: [:show, :destroy, :update, :edit]
   before_action :find_answer_vote, only: [:like, :dislike, :unvote, :create_comment, :delete_comment]
   after_action :perform, only: [:create]
+  after_action :publish_comment, only: [:create_comment]
 
   include Voted
   include Commented

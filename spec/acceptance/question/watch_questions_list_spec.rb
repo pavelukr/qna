@@ -15,11 +15,8 @@ I want to see questions list
     expect(page).to have_content 'MyString'
     expect(page).to have_button 'Delete'
 
-    click_on 'Show'
-
-    expect(page).to have_content 'MyString'
-    expect(page).to have_content 'MyBodyText'
     expect(page).to have_content 'All questions'
+    expect(page).to have_content 'Ask new question'
   end
 
   scenario 'Guest watches questions list' do
@@ -36,9 +33,9 @@ I want to see questions list
     DatabaseCleaner.clean
 
     visit '/questions'
-
     expect(page).to_not have_content 'MyString'
     expect(page).to_not have_content 'Show'
-    expect(page).to have_content 'Ask question'
+    expect(page).to have_content 'All questions'
+    expect(page).to_not have_content 'Ask new question'
   end
 end

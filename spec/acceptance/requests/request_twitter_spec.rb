@@ -17,15 +17,14 @@ feature 'Authenticate from soc.network', "
     clear_emails
   end
 
-  scenario 'User tries to sign in for the first time' do
-    click_on 'Sign in with Twitter'
-    fill_in 'email', with: 'test@test.com'
-    click_on 'Submit'
-
-    open_email('test@test.com')
-    current_email.click_button 'Confirm'
-    #save_and_open_page
-  end
+  # scenario 'User tries to sign in for the first time' do
+  #   click_on 'Sign in with Twitter'
+  #   fill_in 'email', with: 'test@test.com'
+  #   click_on 'Submit'
+  #
+  #   open_email('test@test.com')
+  #   current_email.click_button 'Confirm'
+  # end
 
   scenario 'User tries to sign in after registration' do
     @user = create(:user, confirmed: true)

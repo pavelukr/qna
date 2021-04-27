@@ -30,19 +30,15 @@ describe 'Answers API' do
   describe 'GET /index' do
 
     context 'unauthorized' do
-      before {
+      before do
         @user = create(:user)
         @question2 = create(:question, user: @user)
-      }
-
-      it 'returns 401 status if there is no access_token' do
-        get "/api/v1/questions/#{@question2.id}/answers", params: { format: :json }
-        expect(response.status).to eq 401
       end
 
-      it 'returns 401 status if access_token is invalid' do
-        get "/api/v1/questions/#{@question2.id}/answers", params: { format: :json, access_token: '1234' }
-        expect(response.status).to eq 401
+      it_behaves_like 'API Authenticable'
+
+      def do_request(options = {})
+        get "/api/v1/questions/#{@question2.id}/answers", params: { format: :json }.merge(options)
       end
     end
 
@@ -104,14 +100,10 @@ describe 'Answers API' do
       let(:question) { create(:question, user: user) }
       let(:answer) { create(:answer, question: question, user: user) }
 
-      it 'returns 401 status if there is no access_token' do
-        get "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: { format: :json }
-        expect(response.status).to eq 401
-      end
+      it_behaves_like 'API Authenticable'
 
-      it 'returns 401 status if access_token is invalid' do
-        get "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: { format: :json, access_token: '1234' }
-        expect(response.status).to eq 401
+      def do_request(options = {})
+        get "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: { format: :json }.merge(options)
       end
     end
 
@@ -123,10 +115,10 @@ describe 'Answers API' do
       let!(:comment) { create(:comment, commentable: answer, user_id: user.id) }
       let!(:attachment) { create(:attachment, attachable: answer) }
 
-      before {
+      before do
         get "/api/v1/questions/#{question.id}/answers/#{answer.id}",
             params: { format: :json, access_token: access_token.token }
-      }
+      end
 
       it 'returns 200 status code' do
         expect(response.status).to eq 200
