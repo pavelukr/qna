@@ -25,6 +25,8 @@ class QuestionsController < ApplicationController
 
   def index
     @questions = Question.all
+    search = params[:search]
+    @results = ThinkingSphinx.search(search) unless search == '' || search.nil?
   end
 
   def create
@@ -86,9 +88,7 @@ class QuestionsController < ApplicationController
   end
 
   def create_subscription
-    if @question.save
-      @question.subscriptions.create(user_id: current_user.id, question_id: @question.id)
-    end
+    @question.subscriptions.create(user_id: current_user.id, question_id: @question.id) if @question.save
   end
 
 end

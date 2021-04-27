@@ -39,4 +39,8 @@ yarn-debug.log*
 create.txt
 
 config/database.yml
+
+config/*.sphinx.conf
+db/sphinx
+
 .idea

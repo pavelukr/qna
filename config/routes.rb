@@ -18,6 +18,12 @@ Rails.application.routes.draw do
     delete :delete_comment
   end
 
+  resource :search, only: :index do
+    get 'question', to: 'searches#search_question'
+    get 'comment', to: 'searches#search_comment'
+    get 'answer', to: 'searches#search_answer'
+  end
+
   post '/', to: proc { [200, {}, ['']] }
   post '/questions/10', to: proc { [200, {}, ['']] }
   delete '/', to: proc { [200, {}, ['']] }

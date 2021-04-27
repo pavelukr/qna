@@ -1,0 +1,13 @@
+p
+  = form_for answer_search_path, method: :get do
+    = text_field_tag :answers, params[:answers]
+    = submit_tag "Search"
+
+-if !@results_answer.nil?
+  h3 Results of search
+  -@results_answer.each do |result|
+    .row style="background:white; margin-top:5px; border-radius:10px"
+      .col-md-2
+        strong Answer's body:
+      .col-md-6
+        =result.body
