@@ -36,5 +36,7 @@
 yarn-debug.log*
 .yarn-integrity
 
+create.txt
+
 config/database.yml
 .idea

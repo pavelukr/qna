@@ -4,7 +4,7 @@
       .container class="container-answer"
         .row class="row-answer"
           -if answer.persisted?
-            .col-lg-1== answer.body
+            .col-lg-2 = answer.body
             - if answer.best == true
               .col-lg-1 Best
             .rating-div
@@ -48,3 +48,23 @@
                     .col-lg-2= link_to 'Delete vote', '', class: 'vote-delete-answer-link',
                             method: :delete, remote: true, data: { question_id: @question.id, answer_id: answer.id }
                 p
+        .row class="comments-row-answers_#{answer.id}"
+          .row
+            strong Comment section for answer
+          - answer.comments.each do |comment|
+            - if comment.persisted?
+              .row class="comment-section"
+                .col-lg-2= comment.view
+                - if current_user != nil && current_user.id == comment.user_id
+                  .col-lg-2
+                    = link_to 'Delete comment', question_answer_delete_comment_path(question_id: @question.id, answer_id: answer.id), method: :delete
+        .row
+          - if user_signed_in?
+            .col-lg-2
+              = form_with url: "/questions/#{@question.id}/answers/#{answer.id}/create_comment", method: :post do |form|
+                .row
+                  = form.label :body, 'Enter your comment for this answer'
+                .row
+                  = form.text_area :view
+                .row
+                  = form.submit "Comment"

@@ -1,4 +1,16 @@
 $(document).ready(function () {
+
+    $('.ask-new-answer').click(function (e) {
+        e.preventDefault();
+        $(this).hide();
+        $('form#new_answer').show();
+    });
+
+    $('.submit-form-new-answer').click(function (e) {
+        $('form#new_answer').hide();
+        $('.ask-new-answer').show();
+    });
+
     $('.edit-answer-link').click(function (e) {
         e.preventDefault();
         $(this).hide();

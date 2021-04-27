@@ -35,8 +35,7 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.create(answer_params)
-    @answer.user = current_user
+    @answer = @question.answers.create(answer_params.merge(user_id: current_user.id))
     @answer.save
   end
 
@@ -60,17 +59,13 @@ class AnswersController < ApplicationController
   private
 
   def perform
-    ActionCable.server.broadcast 'answers_channel', { answer: render_answer(@answer, @question) }
+    ActionCable.server.broadcast 'answers_channel', { answer: render_answer(current_user, @answer, @question) }
   end
 
-  def render_answer(answer, question)
-    warden = request.env["warden"]
-    ApplicationController.renderer.instance_variable_set(:@env, { "HTTP_HOST" => "localhost:3000",
-                                                                  "HTTPS" => "off",
-                                                                  "REQUEST_METHOD" => "GET",
-                                                                  "SCRIPT_NAME" => "",
-                                                                  "warden" => warden })
-    ApplicationController.renderer.render(partial: 'answers/answer', locals: { answer: answer, question: question })
+  def render_answer(user, answer, question)
+    ApplicationController.render_with_signed_in_user(user,
+                                                     partial: 'answers/answer',
+                                                     locals: { answer: answer, question: question })
   end
 
   def find_question
