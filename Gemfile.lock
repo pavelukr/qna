@@ -154,8 +154,8 @@ GEM
     doorkeeper (5.5.0)
       railties (>= 5)
     dotenv (1.0.2)
-    dotenv-deployment (0.3.0)
-      dotenv (~> 1.0)
+    dotenv-rails (1.0.2)
+      dotenv (= 1.0.2)
     erubi (1.10.0)
     execjs (2.7.0)
     factory_bot (6.1.0)
@@ -469,7 +469,7 @@ DEPENDENCIES
   devise
   doorkeeper (= 5.5.0)
   dotenv
-  dotenv-deployment
+  dotenv-rails
   factory_bot_rails
   gon
   jbuilder (~> 2.7)
