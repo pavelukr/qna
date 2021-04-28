@@ -39,8 +39,6 @@ yarn-debug.log*
 create.txt
 
 config/database.yml
-config/webpacker.yml
-config/cable.yml
 
 config/development.sphinx.conf
 db/sphinx
