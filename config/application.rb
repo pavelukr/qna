@@ -6,11 +6,6 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-Dotenv.load *Dir.glob(Rails.root.join("config/**/*.env"), File::FNM_DOTMATCH)
-
-# Override any existing variables if an environment-specific file exists
-Dotenv.overload *Dir.glob(Rails.root.join("config/**/*.env.#{Rails.env}"), File::FNM_DOTMATCH)
-
 module Qna
   class Application < Rails::Application
     # Use the responders controller from the responders gem
@@ -33,6 +28,11 @@ module Qna
     config.action_dispatch.rescue_responses['Pundit::NotAuthorizedError'] = :forbidden
 
     config.action_cable.disable_request_forgery_protection = false
+
+    Dotenv.load *Dir.glob(Rails.root.join("config/**/*.env"), File::FNM_DOTMATCH)
+
+    # Override any existing variables if an environment-specific file exists
+    Dotenv.overload *Dir.glob(Rails.root.join("config/**/*.env.#{Rails.env}"), File::FNM_DOTMATCH)
 
     config.generators do |g|
       g.test_framework :rspec,
