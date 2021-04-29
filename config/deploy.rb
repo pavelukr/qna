@@ -17,13 +17,15 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 
 
 namespace :deploy do
-  desc 'Run assets_precompile'
-  task :assets_precompile do
+  before 'assets:precompile', :yarn_install
+  # TEMP FIX for Volta Yarn
+  desc 'Run rake yarn:install'
+  task :yarn_install do
     on roles(:web) do
       within release_path do
         # execute("echo $PATH")
         # execute("which yarn")
-        #execute("cd #{release_path} && /home/happyagent/.volta/bin/yarn install")
+        execute("cd #{release_path} && /home/deployer/.volta/bin/yarn install")
       end
     end
   end
