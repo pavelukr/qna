@@ -14,18 +14,15 @@ append :linked_files, "config/database.yml", "config/master.key"
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system",
                                   'public/uploads', 'public/packs', '.bundle', 'node_modules'
-
+before "deploy:assets:precompile", "deploy:yarn_install"
 
 namespace :deploy do
-  before 'assets:precompile', :yarn_install
-  # TEMP FIX for Volta Yarn
+
   desc 'Run rake yarn:install'
   task :yarn_install do
     on roles(:web) do
       within release_path do
-        # execute("echo $PATH")
-        # execute("which yarn")
-        execute("cd #{release_path} && /home/deployer/.volta/bin/yarn install")
+        execute("cd #{release_path} && yarn install")
       end
     end
   end
