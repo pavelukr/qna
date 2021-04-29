@@ -14,6 +14,7 @@ append :linked_files, "config/database.yml", "config/master.key"
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system",
                                   'public/uploads', 'public/packs', '.bundle', 'node_modules', 'vendor/bundle'
+
 before "deploy:assets:precompile", "deploy:yarn_install"
 
 namespace :deploy do
