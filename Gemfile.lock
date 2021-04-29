@@ -462,6 +462,7 @@ DEPENDENCIES
   capybara-webkit!
   carrierwave
   cocoon
+  coffee-script-source
   database_cleaner
   devise
   doorkeeper (= 5.5.0)
