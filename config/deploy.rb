@@ -12,7 +12,9 @@ set :deploy_user, 'deployer'
 append :linked_files, "config/database.yml", "config/master.key"
 
 # Default value for linked_dirs is []
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system",
+                                  'public/uploads', 'public/packs', '.bundle', 'node_modules'
+
 
 namespace :deploy do
   desc 'Run assets_precompile'
