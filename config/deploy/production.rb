@@ -3,7 +3,7 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server "13.36.168.181", user: "deployer", roles: %w{app db web}, primary: true
+server "15.236.20.213", user: "deployer", roles: %w{app db web}, primary: true
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
@@ -42,7 +42,7 @@ set :rails_env, :production
 # Global options
 # --------------
  set :ssh_options, {
-   keys: %w(/home/gotoinc/RubymineProjects/deployer_key.pem),
+   keys: %w(/home/gotoinc/RubymineProjects/deployer.pem),
    forward_agent: true,
    auth_methods: %w(publickey password),
    port: 4321
