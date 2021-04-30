@@ -17,9 +17,9 @@ server "13.36.168.181", user: "deployer", roles: %w{app db web}, primary: true
 # property set. Specify the username and a domain or IP for the server.
 # Don't use `:all`, it's a meta role.
 
-role :app, %w{deployer@13.36.168.181}
-role :web, %w{deployer@13.36.168.181}
-role :db,  %w{deployer@13.36.168.181}
+role :app, %w{deployer@15.236.20.213}
+role :web, %w{deployer@15.236.20.213}
+role :db,  %w{deployer@15.236.20.213}
 
 set :rails_env, :production
 
