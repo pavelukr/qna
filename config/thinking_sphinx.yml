@@ -1,4 +1,6 @@
 #test:
 #  mysql41: 9313
 #  html_strip: 1
-#  morphology: stem_en
+#  morphology: stem_en\
+production:
+  mysql41: 9312
