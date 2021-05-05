@@ -4,7 +4,7 @@
 #  morphology: stem_en\
 production:
   mysql41: 9312
-  pid_file: ~/qna/shared/tmp/searchd.pid
-  indices_location: ~/qna/shared/db/sphinx
-  configuration_file: ~/qna/shared/production.sphinx.conf
-  binlog_path: ~/qna/shared/binlog
+  pid_file: home/deployer/qna/shared/tmp/searchd.pid
+  indices_location: home/deployer/qna/shared/db/sphinx
+  configuration_file: home/deployer/qna/shared/production.sphinx.conf
+  binlog_path: home/deployer/qna/shared/binlog
