@@ -17,6 +17,7 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
                                   'public/uploads', 'public/packs', '.bundle', 'node_modules', 'vendor/bundle'
 
 before "deploy:assets:precompile", "deploy:yarn_install"
+before "passenger:restart", "thinking_sphinx:index"
 
 namespace :deploy do
 
