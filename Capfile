@@ -7,6 +7,7 @@ require "capistrano/rvm"
 require "capistrano/bundler"
 require "capistrano/rails"
 require "capistrano/passenger"
+require "capistrano/sidekiq"
 
 set :rvm_type, :user
 set :rvm_ruby, '3.0.0'
