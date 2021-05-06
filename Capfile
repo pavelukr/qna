@@ -10,12 +10,10 @@ require "whenever/capistrano"
 require 'thinking_sphinx/capistrano'
 require 'capistrano3/unicorn'
 require "capistrano/sidekiq"
-install_plugin Capistrano::Sidekiq  # Default sidekiq tasks
-# Then select your service manager
-#install_plugin Capistrano::Sidekiq::Systemd
-# or
-install_plugin Capistrano::Sidekiq::Upstart  # tests needed
-#install_plugin Capistrano::Sidekiq::Monit
+require 'sshkit/sudo'
+
+install_plugin Capistrano::Sidekiq
+install_plugin Capistrano::Sidekiq::Upstart
 
 set :rvm_type, :user
 set :rvm_ruby, '3.0.0'

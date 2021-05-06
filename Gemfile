@@ -57,6 +57,7 @@ gem 'whenever'
 gem 'mysql2'
 gem 'thinking-sphinx', '~> 5.0'
 gem 'unicorn'
+gem 'sshkit-sudo'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
