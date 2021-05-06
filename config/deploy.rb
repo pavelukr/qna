@@ -18,6 +18,8 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 
 #before "deploy:assets:precompile", "deploy:yarn_install"
 
+SSHKit.config.command_map[:sidekiq] = "bundle exec sidekiq"
+SSHKit.config.command_map[:sidekiqctl] = "bundle exec sidekiqctl"
 
 namespace :deploy do
 
