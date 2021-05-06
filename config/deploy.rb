@@ -32,6 +32,13 @@ namespace :deploy do
   #   end
   # end
 
+  desc 'Stop sidekiq'
+  task sidekiq:stop do
+    on roles(:web) do
+      execute("sudo systemctl stop sidekiq")
+    end
+  end
+
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
