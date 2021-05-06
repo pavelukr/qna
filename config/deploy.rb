@@ -28,42 +28,4 @@ namespace :deploy do
   #     end
   #   end
   # end
-
-  namespace :sidekiq do
-
-    task :restart do
-      invoke 'sidekiq:stop'
-      invoke 'sidekiq:start'
-    end
-
-    before 'deploy:finished', 'sidekiq:restart'
-
-    task :stop do
-      on roles(:app) do
-        within current_path do
-          pid = p capture "ps aux | grep sidekiq | awk '{print $2}' | sed -n 1p"
-          execute("kill -9 #{pid}")
-        end
-      end
-    end
-
-    task :start do
-      on roles(:app) do
-        within current_path do
-          execute :bundle, "exec sidekiq -e #{fetch(:stage)} -C config/sidekiq.yml -d"
-        end
-      end
-    end
-  end
-
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      #execute :touch, release_path.join('tmp/restart.txt')
-      invoke 'unicorn:restart'
-    end
-  end
-
-  after :publishing, 'deploy:restart'
-  after :finishing, 'deploy:cleanup'
 end
