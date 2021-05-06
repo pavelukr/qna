@@ -6,10 +6,10 @@ require "capistrano/deploy"
 require "capistrano/rvm"
 require "capistrano/bundler"
 require "capistrano/rails"
-require "capistrano/passenger"
 require "capistrano/sidekiq"
 require "whenever/capistrano"
 require 'thinking_sphinx/capistrano'
+require 'capistrano3/unicorn'
 
 set :rvm_type, :user
 set :rvm_ruby, '3.0.0'

@@ -16,25 +16,24 @@ append :linked_files, "config/database.yml", "config/master.key"
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system",
                                   'public/uploads', 'public/packs', '.bundle', 'node_modules', 'vendor/bundle'
 
-before "deploy:assets:precompile", "deploy:yarn_install"
-before "passenger:restart", "thinking_sphinx:index"
-before "thinking_sphinx:index", "thinking_sphinx:restart"
+#before "deploy:assets:precompile", "deploy:yarn_install"
 
 namespace :deploy do
 
-  desc 'Run rake yarn:install'
-  task :yarn_install do
-    on roles(:web) do
-      within release_path do
-        execute("cd #{release_path} && yarn install")
-      end
-    end
-  end
+  # desc 'Run rake yarn:install'
+  # task :yarn_install do
+  #   on roles(:web) do
+  #     within release_path do
+  #       #execute("cd #{release_path} && yarn install")
+  #     end
+  #   end
+  # end
 
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      execute :touch, release_path.join('tmp/restart.txt')
+      #execute :touch, release_path.join('tmp/restart.txt')
+      invoke 'unicorn:restart'
     end
   end
 
