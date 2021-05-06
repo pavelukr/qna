@@ -6,12 +6,12 @@ require "capistrano/deploy"
 require "capistrano/rvm"
 require "capistrano/bundler"
 require "capistrano/rails"
-require "capistrano/sidekiq"
-install_plugin Capistrano::Sidekiq
-install_plugin Capistrano::Sidekiq::Monit
 require "whenever/capistrano"
 require 'thinking_sphinx/capistrano'
 require 'capistrano3/unicorn'
+require "capistrano/sidekiq"
+#install_plugin Capistrano::Sidekiq
+install_plugin Capistrano::Sidekiq::Monit
 
 set :rvm_type, :user
 set :rvm_ruby, '3.0.0'

@@ -8,7 +8,7 @@ set :repo_url, "git@github.com:pavelukr/qna.git"
 set :deploy_to, "/home/deployer/qna"
 set :deploy_user, 'deployer'
 #set :passenger_restart_with_touch, true
-
+set :pty,  false
 # Default value for :linked_files is []
 append :linked_files, "config/database.yml", "config/master.key"
 
@@ -18,7 +18,6 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 
 #before "deploy:assets:precompile", "deploy:yarn_install"
 
-set :pty,  false
 
 namespace :deploy do
 
