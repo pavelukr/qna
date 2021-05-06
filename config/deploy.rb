@@ -18,6 +18,8 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 
 #before "deploy:assets:precompile", "deploy:yarn_install"
 
+set :pty,  false
+
 namespace :deploy do
 
   # desc 'Run rake yarn:install'
