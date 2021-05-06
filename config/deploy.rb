@@ -17,7 +17,7 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
                                   'public/uploads', 'public/packs', '.bundle', 'node_modules', 'vendor/bundle'
 
 #before "deploy:assets:precompile", "deploy:yarn_install"
-
+after "whenever:update_crontab", "deploy:sidekiq:stop"
 SSHKit.config.command_map[:sidekiq] = "bundle exec sidekiq"
 SSHKit.config.command_map[:sidekiqctl] = "bundle exec sidekiqctl"
 
