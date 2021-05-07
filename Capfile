@@ -13,7 +13,7 @@ require "capistrano/sidekiq"
 require 'sshkit/sudo'
 
 install_plugin Capistrano::Sidekiq
-#install_plugin Capistrano::Sidekiq::Upstart
+install_plugin Capistrano::Sidekiq::Upstart
 install_plugin Capistrano::Sidekiq::Monit
 
 set :rvm_type, :user
