@@ -19,9 +19,7 @@ Rails.application.routes.draw do
   end
 
   resource :search, only: :index do
-    get 'question', to: 'searches#search_question'
-    get 'comment', to: 'searches#search_comment'
-    get 'answer', to: 'searches#search_answer'
+    get 'search', to: 'searches#search'
   end
 
   post '/', to: proc { [200, {}, ['']] }

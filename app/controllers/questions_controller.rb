@@ -26,8 +26,6 @@ class QuestionsController < ApplicationController
 
   def index
     @questions = Question.all
-    search = params[:search]
-    @results = ThinkingSphinx.search(search) unless search == '' || search.nil?
   end
 
   def create

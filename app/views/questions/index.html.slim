@@ -18,10 +18,3 @@ h1 Questions
           .col-md-6
             = result.view
 
-p= link_to 'Search through questions', question_search_path
-p= link_to 'Search through answers', answer_search_path
-p= link_to 'Search through comments', comment_search_path
-
--if policy(Question).create?
-  p
-    =link_to 'Ask new question', new_question_path

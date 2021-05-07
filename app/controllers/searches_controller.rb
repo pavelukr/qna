@@ -1,17 +1,14 @@
 class SearchesController < ApplicationController
-
-  def search_question
-    questions = params[:questions]
-    @results_question = Question.search(questions) unless questions == '' || questions.nil?
-  end
-
-  def search_comment
-    comments = params[:comments]
-    @results_comment = Comment.search(comments) unless comments == '' || comments.nil?
-  end
-
-  def search_answer
-    answers = params[:answers]
-    @results_answer = Answer.search(answers) unless answers == '' || answers.nil?
+  def search
+    if params[:search_in] != nil
+      type = params['/search/search'][:type]
+      if type != 'All'
+        type = type.classify.constantize
+      else
+        type = 'ThinkingSphinx'.classify.constantize
+      end
+      search_in = params[:search_in]
+      @results = type.search(search_in) unless search_in == '' || search_in.nil?
+    end
   end
 end
