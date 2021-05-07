@@ -1,3 +1,5 @@
+concurrency: 5
 production:
-  pidfile: /home/deployer/qna/shared/tmp/pids/sidekiq.pid
+  pidfile: ./tmp/pids/sidekiq.pid
   logfile: log/sidekiq_production.log
+  concurrency: 50
