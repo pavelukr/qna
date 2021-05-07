@@ -1,6 +1,6 @@
 class Answer < ApplicationRecord
   validates :body, presence: true
-  belongs_to :question
+  belongs_to :question, touch: true
   belongs_to :user
   has_many :attachments, as: :attachable
   has_many :votes, as: :votable

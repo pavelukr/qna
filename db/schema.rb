@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_16_132749) do
+ActiveRecord::Schema.define(version: 2021_05_07_120105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(version: 2021_04_16_132749) do
     t.bigint "question_id"
     t.bigint "user_id"
     t.boolean "best", default: false
+    t.index ["best"], name: "index_answers_on_best"
+    t.index ["body"], name: "index_answers_on_body"
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
@@ -52,7 +54,9 @@ ActiveRecord::Schema.define(version: 2021_04_16_132749) do
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type"
     t.index ["user_id"], name: "index_comments_on_user_id"
+    t.index ["view"], name: "index_comments_on_view"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -103,6 +107,7 @@ ActiveRecord::Schema.define(version: 2021_04_16_132749) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id"
+    t.index ["title"], name: "index_questions_on_title"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
@@ -137,6 +142,7 @@ ActiveRecord::Schema.define(version: 2021_04_16_132749) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_votes_on_user_id"
+    t.index ["votable_id", "votable_type"], name: "index_votes_on_votable_id_and_votable_type"
   end
 
   add_foreign_key "authorizations", "users"

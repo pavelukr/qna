@@ -1,69 +1,71 @@
-p
-  div class="body_answer_#{answer.id}" id="body_answer_#{answer.id}"
-    .container class="container-answer"
-      .row class="row-answer"
-        - if answer.persisted?
-          .col-lg-2 = answer.body
-          - if answer.best == true
-            .col-lg-1 Best
-          .rating-div
-            .col-lg-1= "Rating: #{answer.count_voices}"
-          - if answer.attachments[0] != nil && answer.attachments[0].persisted?
-            .col-lg-1 Attachments:
-            .col-lg-2
-              - answer.attachments.each do |a|
-                - if a.persisted?
-                  .row
-                    = link_to a.file.identifier, a.file.url
-          - if answer.attachments[0] != nil && answer.attachments[0].persisted?
-            .col-lg-2
-              - answer.attachments.each do |a|
-                - if a.persisted? && policy(answer).delete_attachment?
-                  .row= button_to 'Delete this file', question_answer_delete_attachment_path(question, answer, attachment_id: a),
-                          method: :patch, remote: true
-          - if policy(answer).update?
-            .col-lg-2 class="edit-answer-form"
-              .row= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-              .row = link_to 'Delete', question_answer_path(question, answer),
-                      remote: true, method: :delete, class: 'delete-answer-link'
-              .row class="edit-answer-row"
-                = form_for [question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |form|
-                  = form.text_area :body, class: "input-edit-answer", id: "input-answer-id"
-                  = form.submit 'Save', class: "edit-save-answer-link-#{answer.id}", id: "edit-save-answer-link-#{answer.id}"
-          - if answer.best != true && policy(answer).select_best?
-            .col-lg-2= button_to 'Select answer as best', question_answer_select_best_path(question, answer),
-                    method: :patch, remote: true
-          - if policy(answer).like?
-            .col-lg-1= link_to 'Vote', '', class: 'vote-answer-link', remote: true, data: { answer_id: answer.id, flag: answer.check_for_user(current_user) }
-          .links-for-voting style="display:none"
-            .col-lg-2
-              .row= link_to 'Vote for', '', class: 'vote-for-answer-link',
-                      method: :post, remote: true, data: { question_id: question.id, answer_id: answer.id }
-              .row= link_to 'Vote against', '', class: 'vote-against-answer-link',
-                      method: :post, remote: true, data: { question_id: question.id, answer_id: answer.id }
-          .link-for-deleting style="display:none"
-            .col-lg-2
-              = link_to 'Delete vote', '', class: 'vote-delete-answer-link',
-                      method: :delete, remote: true, data: { question_id: question.id, answer_id: answer.id }
-              p
-      .row class="comments-row-answers_#{answer.id}"
+-cache answer do
+  p
+    div class="body_answer_#{answer.id}" id="body_answer_#{answer.id}"
+      .container class="container-answer"
+        .row class="row-answer"
+          - if answer.persisted?
+            .col-lg-2 = answer.body
+            - if answer.best == true
+              .col-lg-1 Best
+            .rating-div
+              .col-lg-1= "Rating: #{answer.count_voices}"
+            - if answer.attachments[0] != nil && answer.attachments[0].persisted?
+              .col-lg-1 Attachments:
+              .col-lg-2
+                - answer.attachments.each do |a|
+                  - if a.persisted?
+                    .row
+                      = link_to a.file.identifier, a.file.url
+            - if answer.attachments[0] != nil && answer.attachments[0].persisted?
+              .col-lg-2
+                - answer.attachments.each do |a|
+                  - if a.persisted? && policy(answer).delete_attachment?
+                    .row= button_to 'Delete this file', question_answer_delete_attachment_path(question, answer, attachment_id: a),
+                            method: :patch, remote: true
+            - if policy(answer).update?
+              .col-lg-2 class="edit-answer-form"
+                .row= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+                .row = link_to 'Delete', question_answer_path(question, answer),
+                        remote: true, method: :delete, class: 'delete-answer-link'
+                .row class="edit-answer-row"
+                  = form_for [question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |form|
+                    = form.text_area :body, class: "input-edit-answer", id: "input-answer-id"
+                    = form.submit 'Save', class: "edit-save-answer-link-#{answer.id}", id: "edit-save-answer-link-#{answer.id}"
+            - if answer.best != true && policy(answer).select_best?
+              .col-lg-2= button_to 'Select answer as best', question_answer_select_best_path(question, answer),
+                      method: :patch, remote: true
+            - if policy(answer).like?
+              .col-lg-1= link_to 'Vote', '', class: 'vote-answer-link', remote: true, data: { answer_id: answer.id, flag: answer.check_for_user(current_user) }
+            .links-for-voting style="display:none"
+              .col-lg-2
+                .row= link_to 'Vote for', '', class: 'vote-for-answer-link',
+                        method: :post, remote: true, data: { question_id: question.id, answer_id: answer.id }
+                .row= link_to 'Vote against', '', class: 'vote-against-answer-link',
+                        method: :post, remote: true, data: { question_id: question.id, answer_id: answer.id }
+            .link-for-deleting style="display:none"
+              .col-lg-2
+                = link_to 'Delete vote', '', class: 'vote-delete-answer-link',
+                        method: :delete, remote: true, data: { question_id: question.id, answer_id: answer.id }
+                p
+        .row class="comments-row-answers_#{answer.id}"
+          .row
+            - if !answer.comments[0].nil? && answer.comments[0].persisted?
+              strong Comment section for answer
+            - answer.comments.each do |comment|
+              - if comment.persisted?
+                -cache comment do
+                  .row class="comment-section"
+                    .col-lg-2= comment.view
+                    - if policy(comment).delete_comment?
+                      .col-lg-2
+                        = link_to 'Delete comment', question_answer_delete_comment_path(question_id: question.id, answer_id: answer.id), method: :delete
         .row
-          - if !answer.comments[0].nil? && answer.comments[0].persisted?
-            strong Comment section for answer
-          - answer.comments.each do |comment|
-            - if comment.persisted?
-              .row class="comment-section"
-                .col-lg-2= comment.view
-                - if policy(comment).delete_comment?
-                  .col-lg-2
-                    = link_to 'Delete comment', question_answer_delete_comment_path(question_id: question.id, answer_id: answer.id), method: :delete
-      .row
-        .col-lg-2
-          - if policy(Comment).create_comment?
-            = form_with url: "/questions/#{question.id}/answers/#{answer.id}/create_comment", method: :post do |form|
-              .row
-                = form.label :body, 'Enter your comment for this answer'
-              .row
-                = form.text_area :view
-              .row
-                = form.submit "Comment"
+          .col-lg-2
+            - if policy(Comment).create_comment?
+              = form_with url: "/questions/#{question.id}/answers/#{answer.id}/create_comment", method: :post do |form|
+                .row
+                  = form.label :body, 'Enter your comment for this answer'
+                .row
+                  = form.text_area :view
+                .row
+                  = form.submit "Comment"
