@@ -25,21 +25,19 @@
                 -if policy(comment).delete_comment?
                   =link_to 'Delete comment', question_delete_comment_path(@question), method: :delete
     -if policy(Comment).create_comment?
-      .col-lg-2
-        -cache ['comment_form', @question] do
-          = form_with url: "/questions/#{@question.id}/create_comment", method: :post do |form|
-            .row
-              = form.label :body, 'Enter your comment for this question'
-            .row
-              = form.text_area :view
-            .row
-              = form.submit "Comment"
-
+      .row
+        .col-lg-2
+          -cache ['comment_form', @question] do
+            = form_with url: "/questions/#{@question.id}/create_comment", method: :post do |form|
+              .row
+                = form.label :body, 'Enter your comment for this question'
+              .row
+                = form.text_area :view
+              .row
+                = form.submit "Comment"
   h2 Answers
   .answers class="answers-all"
     = render "answers"
-
-
   -if policy(Answer).create?
     p
       =link_to 'Ask new answer', '', class: 'ask-new-answer'

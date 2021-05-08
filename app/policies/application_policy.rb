@@ -35,7 +35,7 @@ class ApplicationPolicy
   end
 
   def user_check
-    true unless user.nil?
+    user != nil ? true : false
   end
 
   class Scope

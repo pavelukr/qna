@@ -29,7 +29,7 @@ Rails.application.configure do
   #
   #   config.cache_store = :null_store
   # end
-  config.action_controller.perform_caching = true
+  config.action_controller.perform_caching = false
 
   config.force_ssl = false
   # Store uploaded files on the local file system (see config/storage.yml for options).
