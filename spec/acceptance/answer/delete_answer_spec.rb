@@ -14,7 +14,7 @@ I want to delete my answer
 answer deletes one', js: true do
     sign_in(user)
     visit question_path(question)
-
+    save_and_open_page
     click_on 'Delete'
 
     expect(page).to_not have_content 'Body body'
