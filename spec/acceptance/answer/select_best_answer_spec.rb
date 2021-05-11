@@ -31,8 +31,7 @@ I want to select best answer
   end
 
   scenario "Authenticated user tries to select best answer of another user's question" do
-    user_2 = create(:user)
-    sign_in(user_2)
+    sign_in(User.new)
     visit question_path(question)
 
     expect(page).to_not have_button 'Select answer as best'

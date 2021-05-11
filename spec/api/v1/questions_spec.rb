@@ -39,7 +39,7 @@ describe 'Questions API' do
     context 'authorized' do
       let(:access_token) { create(:access_token) }
       let(:user) { create(:user) }
-      let!(:questions) { create_list(:question, 2, { user: user }) }
+      let!(:questions) { create_list(:question, 1, { user: user }) }
       let(:question) { questions.first }
       let!(:answer) { create(:answer, question: question, user: user) }
       let!(:comment) { create(:comment, commentable: question, user_id: user.id) }
@@ -52,7 +52,7 @@ describe 'Questions API' do
       end
 
       it 'returns list of questions' do
-        expect(response.body).to have_json_size(2)
+        expect(response.body).to have_json_size(1)
       end
 
       %w[id title body created_at updated_at].each do |attr|

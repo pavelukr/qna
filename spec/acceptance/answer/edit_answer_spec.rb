@@ -15,9 +15,8 @@ I want to edit my answer
     expect(page).to_not have_link 'Edit'
   end
 
-  scenario "Authenticated user try to edit other user's answer" do
-    user_2 = create(:user)
-    sign_in(user_2)
+  scenario "Authenticated user try to edit other user's answer" do\
+    sign_in(User.new)
     visit question_path(question)
 
     expect(page).to_not have_link 'Edit'

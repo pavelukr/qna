@@ -15,7 +15,6 @@ I want to see questions list
     expect(page).to have_content 'MyString'
     expect(page).to have_button 'Delete'
 
-    expect(page).to have_content 'All questions'
     expect(page).to have_content 'Ask new question'
   end
 
@@ -26,7 +25,6 @@ I want to see questions list
 
     expect(page).to have_content 'MyString'
     expect(page).to have_content 'MyBodyText'
-    expect(page).to have_content 'All questions'
   end
 
   scenario 'Guest open page of empty questions list' do
@@ -35,7 +33,6 @@ I want to see questions list
     visit '/questions'
     expect(page).to_not have_content 'MyString'
     expect(page).to_not have_content 'Show'
-    expect(page).to have_content 'All questions'
     expect(page).to_not have_content 'Ask new question'
   end
 end

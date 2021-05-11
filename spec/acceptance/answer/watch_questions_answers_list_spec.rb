@@ -21,7 +21,6 @@ I want to see questions and answers list
     expect(page).to have_content 'Delete'
     expect(page).to have_content 'MyText'
     expect(page).to have_content 'MyBodyText'
-    expect(page).to have_content 'All questions'
   end
 
   scenario 'Guest watches questions and answers list' do
@@ -32,7 +31,6 @@ I want to see questions and answers list
     expect(page).to_not have_content 'Delete'
     expect(page).to have_content 'MyText'
     expect(page).to have_content 'MyBodyText'
-    expect(page).to have_content 'All questions'
   end
 
   scenario 'Guest open page of empty questions list' do
