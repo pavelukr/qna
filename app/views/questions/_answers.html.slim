@@ -17,11 +17,10 @@
                     - if a.persisted?
                       .row
                         = link_to a.file.identifier, a.file.url
-              - if answer.attachments[0] != nil && answer.attachments[0].persisted?
+              - if answer.attachments[0] != nil && answer.attachments[0].persisted? && policy(answer).delete_attachment?
                 .col-lg-2
                   - answer.attachments.each do |a|
-                    - if a.persisted? && policy(answer).delete_attachment?
-                      .row= button_to 'Delete this file', question_answer_delete_attachment_path(@question, answer, attachment_id: a),
+                    .row= button_to 'Delete this file', question_answer_delete_attachment_path(@question, answer, attachment_id: a),
                               method: :patch, remote: true
               -if policy(answer).update?
                 .col-lg-2 class="edit-answer-form"

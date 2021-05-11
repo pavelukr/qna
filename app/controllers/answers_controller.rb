@@ -28,7 +28,7 @@ class AnswersController < ApplicationController
     @answer = Answer.find(params[:answer_id])
     @attachment = Attachment.find(params[:attachment_id])
     authorize @answer
-    @attachment.destroy if current_user.creator_of(@answer)
+    @attachment.destroy
     @answer.save
   end
 
@@ -43,20 +43,12 @@ class AnswersController < ApplicationController
 
   def destroy
     authorize @answer
-    @answer.destroy if current_user.creator_of(@answer)
+    @answer.destroy
   end
 
   def update
     authorize @answer
-    @answer.update(answer_params) if current_user.creator_of(@answer)
-  end
-
-  def update
-    if @answer.update(answer_params)
-      redirect_to question_answer_path
-    else
-      render :edit
-    end
+    @answer.update(answer_params)
   end
 
   private
