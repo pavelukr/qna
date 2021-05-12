@@ -1,7 +1,7 @@
 - @question.answers.best_sort.each do |answer|
   p
     -cache answer do
-      div class="body_answer_#{answer.id}" id="body_answer_#{answer.id}"
+      div class="body_answer_#{answer.id}" id="body_answer_#{answer.id}" style="padding: 20px;margin: 0px 0px 20px 0px;position: relative;margin-right: 12px;"
         .container class="container-answer"
           .row class="row-answer"
             - if answer.persisted?
@@ -47,25 +47,25 @@
                   = link_to 'Delete vote', '', class: 'vote-delete-answer-link',
                         method: :delete, remote: true, data: { question_id: @question.id, answer_id: answer.id }
                   p
-          .row class="comments-row-answers_#{answer.id}"
-            .row
+          .comment-section
+            .row class="comments-row-answers_#{answer.id}"
               - if !answer.comments[0].nil? && answer.comments[0].persisted?
                 strong Comment section for answer
               - answer.comments.each do |comment|
-                - if comment.persisted?
-                  -cache comment do
-                    .row class="comment-section"
-                      .col-lg-2= comment.view
-                      -if policy(comment).delete_comment?
-                        .col-lg-2
-                          = link_to 'Delete comment', question_answer_delete_comment_path(question_id: @question.id, answer_id: answer.id), method: :delete
-          -if policy(Comment).create_comment?
-            .row
-              .col-lg-2
-                = form_with url: "/questions/#{@question.id}/answers/#{answer.id}/create_comment", method: :post do |form|
-                  .row
-                    = form.label :body, 'Enter your comment for this answer'
-                  .row
-                    = form.text_area :view
-                  .row
-                    = form.submit "Comment"
+                -cache comment do
+                  .row style="padding: 20px;margin: 0px 0px 20px 0px;position: relative;"
+                    .col-lg-3
+                      = comment.view
+                    -if policy(comment).delete_comment?
+                      .col-lg-2
+                        = link_to 'Delete comment', question_answer_delete_comment_path(question_id: @question.id, answer_id: answer.id), method: :delete
+            -if policy(Comment).create_comment?
+              .row
+                .col-lg-2
+                  = form_with url: "/questions/#{@question.id}/answers/#{answer.id}/create_comment", method: :post do |form|
+                    .row
+                      = form.label :body, 'Enter your comment for this answer'
+                    .row
+                      = form.text_area :view
+                    .row
+                      = form.submit "Comment"

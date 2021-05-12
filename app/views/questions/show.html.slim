@@ -14,27 +14,29 @@
             .col-lg-1
               .row
                 =link_to 'Delete this file', question_delete_attachment_path(@question, attachment_id: a), method: :patch
-    .row class="comments_row_#{@question.id}"
-      h4 Comment section for question
-      -@question.comments.each do |comment|
-        - if comment.persisted?
-          - cache comment do
-            .row class="comment-section"
-              .col-lg-2= comment.view
-              .col-lg-2
-                -if policy(comment).delete_comment?
-                  =link_to 'Delete comment', question_delete_comment_path(@question), method: :delete
-    -if policy(Comment).create_comment?
-      .row
-        .col-lg-2
-          -cache ['comment_form', @question] do
-            = form_with url: "/questions/#{@question.id}/create_comment", method: :post do |form|
-              .row
-                = form.label :body, 'Enter your comment for this question'
-              .row
-                = form.text_area :view
-              .row
-                = form.submit "Comment"
+    .comment-question
+      .row class="comments_row_#{@question.id}"
+        h4 Comment section for question
+        -@question.comments.each do |comment|
+          - if comment.persisted?
+            - cache comment do
+              .row style="padding: 10px;margin: 0px 0px 10px 0px;position: relative;"
+                .col-lg-3
+                  = comment.view
+                .col-lg-2
+                  -if policy(comment).delete_comment?
+                    =link_to 'Delete comment', question_delete_comment_path(@question), method: :delete
+      -if policy(Comment).create_comment?
+        .row
+          .col-lg-2
+            -cache ['comment_form', @question] do
+              = form_with url: "/questions/#{@question.id}/create_comment", method: :post do |form|
+                .row
+                  = form.label :body, 'Enter your comment for this question'
+                .row
+                  = form.text_area :view
+                .row
+                  = form.submit "Comment"
   h2 Answers
   .answers class="answers-all"
     = render "answers"
